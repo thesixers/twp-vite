@@ -1,16 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useEffect, useState, useRef, use } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons'
 import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons'
 import EpisodesTab from '../components/EpisodesTab'
 import ToonDetailsTab from '../components/ToonDetailsTab'
 import CommentsTab from '../components/CommentsTab'
+import { fetchWebtoonDetails, serverUrl } from '../../requests/apicalls'
+import { BiAddToQueue, BiTrash, BiPlus } from 'react-icons/bi'
 import axios from 'axios'
-import { fetchWebtoonDetails } from '../../requests/apicalls'
+import { useUserContext } from '../../context/UserProvider'
+import EpisodeUpload from '../components/EpisodeUpload'
 
 export default function Webtoon() {
   let params = useParams()
+  const navigate = useNavigate()
+  const { user } = useUserContext()
   const [webtoonData, setWebtoonData] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0); 
@@ -18,6 +23,9 @@ export default function Webtoon() {
   const [currentNav, setCurrentNav] = useState(0)
   const [isLoading, setIsLoading] = useState(true);
   const [newComment, setNewComment] = useState("");
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+  const [showEpisodeUploadForm, setShowEpisodeUploadForm] = useState(false)
+
 
   useEffect(() => {
     const setWebToonDetails = async () => {
@@ -73,6 +81,25 @@ export default function Webtoon() {
     // Handle success/error from API, potentially update/remove optimisticComment
   };
 
+  const handleDeleteToon = async () => {
+    setShowDeleteConfirmation(true);
+  };
+
+  const confirmDelete = async () => {
+    setShowDeleteConfirmation(false);
+    try {
+      let res = await axios.delete(`${serverUrl}/twp/webtoon/${webtoonData._id}`);
+      if(res.data){
+        navigate(
+          user.isAuthor === true ? "/mywebtoons" : "/webtoons"
+        )
+      }
+    } catch (error) {
+      console.error("Failed to delete webtoon:", error);
+    }
+  }
+
+
   if (isLoading) {
     return <div className="flex justify-center items-center h-screen">Loading webtoon details...</div>;
   }
@@ -94,10 +121,10 @@ export default function Webtoon() {
             className="toon-image w-full h-full object-cover"
           />
           <div className="toon-title absolute top-2 left-4 z-10  text-white text-2xl font-bold rounded-md">
-            Giants In Madik 
+            {title}
           </div>
           <div 
-            className="like-button-wrapper absolute bottom-4 right-4 z-10 flex items-center gap-2 cursor-pointer p-2 rounded-lg bg-black/50 hover:bg-black/70 transition-colors"
+            className="like-button-wrapper absolute bottom-4 right-16 z-10 flex items-center gap-2 cursor-pointer p-2 rounded-lg bg-black/50 hover:bg-black/70 transition-colors"
             onClick={handleLikeClick}
             role="button"
             tabIndex={0} 
@@ -105,6 +132,45 @@ export default function Webtoon() {
           >
             <FontAwesomeIcon icon={isLiked ? faHeartSolid : faHeartRegular} className={`text-2xl ${isLiked ? 'text-red-500' : 'text-white'}`} />
             <span className="text-white font-semibold text-lg">{likeCount}</span>
+          </div>
+          <div 
+            className="like-button-wrapper absolute top-4 right-4 z-10 flex items-center gap-2 cursor-pointer p-2 rounded-lg bg-black/50 hover:bg-black/70 transition-colors"
+            onClick={handleDeleteToon}
+            role="button"
+          >
+            <BiTrash color='white' className='cursor-pointer'/>
+          </div>
+          {showDeleteConfirmation && (
+            <div className="fixed inset-0 bg-[#ffffff4f] bg-opacity-50 flex items-center justify-center z-50 px-[20px]">
+              <div className="bg-white rounded-lg p-8 max-w-md w-full">
+                <h2 className="text-xl font-bold mb-4 text-gray-800">Confirm Deletion</h2>
+                <p className="text-gray-700 mb-6">Are you sure you want to delete this webtoon? This action cannot be reversed.</p>
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setShowDeleteConfirmation(false)}
+                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={confirmDelete}
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <div 
+            className="like-button-wrapper absolute bottom-4 right-4 z-10 flex items-center gap-2 cursor-pointer p-2 rounded-lg bg-black/50 hover:bg-black/70 transition-colors"
+            onClick={() => {
+              showEpisodeUploadForm ? setShowEpisodeUploadForm(false) : setShowEpisodeUploadForm(true)
+            }}
+            role="button"
+          >
+            <BiPlus size={25} color='white'/>
           </div>
         </div>
 
@@ -137,6 +203,14 @@ export default function Webtoon() {
           </div>
           </div>
         </div>
+
+        {
+          showEpisodeUploadForm &&(
+            <div className='absolute top-0 left-0 right-0 bottom-0 inset-0 bg-[#ffffff4f] bg-opacity-50 flex items-center justify-center z-50 px-[20px]'>
+              <EpisodeUpload setShowEpisodeUploadForm={setShowEpisodeUploadForm} />
+            </div>
+          )
+        }
       </section>
     </div>
   )

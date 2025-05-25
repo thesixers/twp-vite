@@ -1,6 +1,6 @@
 import axios from "axios";
 
-
+export const serverUrl = 'http://localhost:3001'
 
 export const fetchWebtoonDetails = async (ID) => {
     const abortController = new AbortController();
@@ -21,6 +21,7 @@ export const fetchWebtoonDetails = async (ID) => {
 };
 
 export const fetchWebtoons = async () => {
+  axios.defaults.withCredentials = true
   const abortController = new AbortController();
   const signal = abortController.signal;
 
@@ -29,11 +30,11 @@ export const fetchWebtoons = async () => {
     }, 10000);
 
   try{
-    let res = await axios.get('http://127.0.0.1:3001/twp/webtoon/fetchtoons', { signal })
+    let res = await axios.get(`${serverUrl}/twp/webtoon/fetchtoons`, { signal })
     return res.data
   }
   catch(err){
-    console.error(err)
+    console.error(err) 
     return null
   }
 }

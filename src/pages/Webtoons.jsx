@@ -1,39 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import ToonCard from "../components/ToonCard"
 import { BiSearch } from 'react-icons/bi'
-import { fetchWebtoons } from '../../requests/apicalls';
+import { useUserContext } from '../../context/UserProvider';
 
 export default function Webtoons() {
-
-  const [webtoons, setWebtoons] = React.useState(null);
+  const { webtoons, episodes, isLoading } = useUserContext()
+  
   const [searchTerm, setSearchTerm] = React.useState('');
-  const [genres, setGenres] = React.useState(["all","romance", "supernatural", "thriller", "comedy", "sci-fi", "miniservice", "horror", "miniseries"])
+  const [genres, setGenres] = React.useState(["all", "twporiginals","romance", "supernatural", "thriller", "comedy", "sci-fi", "miniservice", "horror", "miniseries"])
   const [filteredWebtoons, setFilteredWebtoons] = React.useState(webtoons);
   const [isFilterOpen, setIsFilterOpen] = React.useState(false);
   const [selectedGenre, setSelectedGenre] = React.useState('all');
-  const [isLoading, setIsLoading] = React.useState(true);
-  const [episodes, setEpisodes] = useState([])
 
 
 useEffect(() => {
-  const loadWebtoons = async () => {
-    let res = await fetchWebtoons();
-    if(!res){
-      setIsLoading(false);
-      return;
-    }
-    const { episodes, toonz } = res;
-    console.log({episodes, toonz});
-
-    setWebtoons(toonz);
-    setEpisodes(episodes);
-    setFilteredWebtoons(toonz);
-    setIsLoading(false);
-  };
-
-  
-  loadWebtoons();
-}, [])
+  setFilteredWebtoons(webtoons)
+}, [webtoons])
 
   // the search function
   const handleSearch = (e) => {
@@ -52,7 +34,12 @@ useEffect(() => {
   const handleFilter = () => {
     if (selectedGenre === 'all') {
       setFilteredWebtoons(webtoons);
-    } else {
+    } 
+    else if (selectedGenre === 'twporiginals') {
+      const filteredWebtoons = webtoons.filter((toon) => toon.twporiginal === true);
+      setFilteredWebtoons(filteredWebtoons);
+    }
+    else {
       const filteredWebtoons = webtoons.filter((toon) => toon.genre === selectedGenre || toon.genre.includes(selectedGenre));
       setFilteredWebtoons(filteredWebtoons);
     }
@@ -67,7 +54,7 @@ useEffect(() => {
     return <div className="flex justify-center items-center h-screen">Loading webtoon details...</div>;
   }
 
-  if (!webtoons) {
+  if (!webtoons || webtoons.length < 1) {
     return <div className="flex justify-center items-center h-screen text-red-500">Failed to load webtoon. Please try again.</div>;
   }
 
@@ -82,8 +69,9 @@ useEffect(() => {
           </div>
           <div 
             className='text-[#ff0000] border-[#ff0000] 
-            border-[1px] p-[2px] w-[80px] rounded-[5px] 
+            border-[1px] p-[2px] w-[80px] rounded-[5px]  
             text-center cursor-pointer hover:bg-[#ff0000] 
+            duration-300 ease-in-out transition-colors
             hover:text-white'
             onClick={handleFilterClick}
           >
@@ -96,7 +84,7 @@ useEffect(() => {
                   {
                     genres.map((genre, index) => {
                       return (
-                        <div className='text-gray-700 cursor-pointer hover:text-[#ff0000]' 
+                        <div className='text-gray-700 cursor-pointer transition-colors duration-300 ease-in-out hover:text-[#ff0000]' 
                           onClick={() => setSelectedGenre(genre)}
                           key={index}
                           >

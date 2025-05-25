@@ -1,11 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom"
 import ig from "/instagram.png"
 import tk from "/tik-tok.png"
 import fb from "/facebook.png"
+import { useUserContext } from '../../context/UserProvider'
 
 export default function Footer() {
-  const navList = ["Home", "Webtoons", "TWP-Original", "About", "Contact", "Login", "SignUp"];
+  const [navList, setNavList] = useState(["Home", "Webtoons", "About", "Login", "SignUp", "Become an Author"]);
+  const { user } = useUserContext();
+
+  useEffect(() => {
+    if(user) setNavList(["Home", "Webtoons", "About", "Become an Author"]);
+  }, [user])
+
+
   return (
     <div className='pt-[10px]'>
       <footer className='w-full p-[20px]'>

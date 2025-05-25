@@ -1,18 +1,28 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import Logo from "/twp_logo-nobg.png"
 import { BiMenu, BiX } from 'react-icons/bi';
+import { useUserContext } from '../../context/UserProvider';
 
 export default function Navbar() {
-    const navList = ["Home", "Webtoons", "TWP-Original", "About", "Contact", "Login", "SignUp"];
+    const [navList, setNavList] = useState(["Home", "Webtoons", "About", "Login", "SignUp"]);
     const [width, setWidth] = React.useState(window.innerWidth)
     const [isMobileNavOpen, setIsMobileNavOpen] = React.useState(false)
+    const { user } = useUserContext()
   
     useEffect(() => {
       const handleResize = () => {
         const newWidth = window.innerWidth;
         setWidth(newWidth);
       };
+
+      if(user){
+        if(user.isAuthor){
+            setNavList(["Home", "Webtoons", "Mywebtoons", "About"])
+        }else{
+            setNavList(["Home", "Webtoons", "About"])
+        }
+    }
   
       window.addEventListener('resize', handleResize);
   
@@ -20,6 +30,16 @@ export default function Navbar() {
         window.removeEventListener('resize', handleResize);
       };
     }, []);
+
+    useEffect(() => {
+        if(user){
+            if(user.isAuthor === true){
+                setNavList(["Home", "Webtoons", "Mywebtoons", "About"])
+            }else{
+                setNavList(["Home", "Webtoons", "About"])
+            }
+        }
+    }, [user])
 
     const handleMobileNav = () => {
         setIsMobileNavOpen(!isMobileNavOpen)
@@ -32,29 +52,43 @@ export default function Navbar() {
             <img src={Logo} alt="logo" className="w-full h-full" />
         </div>
         {
-            width > 800 ?
-            <div className="nav-items gap-[25px] flex items-center">
-            {navList.map((item, index) => (
-                <NavLink 
-                    to={`/${item === "Home" ? "" : item.toLowerCase()}`}
-                    key={index}
-                    className={({isActive}) => `
-                        p-[8px] text-[13px] ${
-                        item === "Login" || item === "SignUp"
-                        ? `bg-[#ff0000] text-[#ffff] rounded-[20px] w-[80px] h-[27px] flex justify-center items-center nav-btn-shadow font-bold ${isActive ? "active-btn" : ""}` 
-                        : `nav-item relative hover:text-[#ff0000] font-bold cursor-pointer transition-colors duration-300 ease-in-out ${isActive ? "text-[#ff0000] active" : "text-gray-600"}`
-                    }`}
-                >
-                {item}
-                </NavLink>
-            ))}
-        </div>
+            width > 650 ?
+            <div className="nav-items gap-[25px] flex items-center px-[15px]">
+                {navList.map((item, index) => (
+                    <NavLink 
+                        to={`/${item === "Home" ? "" : item.toLowerCase()}`}
+                        key={index}
+                        className={({isActive}) => `
+                            p-[8px] text-[13px] ${
+                            item === "Login" || item === "SignUp"
+                            ? `bg-[#ff0000] text-[#ffff] rounded-[20px] w-[80px] h-[27px] flex justify-center items-center nav-btn-shadow font-bold ${isActive ? "active-btn" : ""}` 
+                            : `nav-item relative hover:text-[#ff0000] font-bold cursor-pointer transition-colors duration-300 ease-in-out ${isActive ? "text-[#ff0000] active" : "text-gray-600"}`
+                        }`}
+                    >
+                    {item}
+                    </NavLink>
+                ))}
+                {
+                    user && (
+                        <div className='border border-[#ff0000] p-[5px] text-center w-[35px] h-[35px] flex justify-center items-center rounded-full bg-[#ff0000]'>
+                            <span className='text-white font-bold text-[18px]'>AN</span>
+                        </div>
+                    )
+                }
+            </div>
         :
-        <div className="mobile-nav">
+        <div className="mobile-nav flex gap-[20px] items-center">
+            {
+                user && (
+                    <div className='border border-[#ff0000] p-[5px] text-center w-[35px] h-[35px] flex justify-center items-center rounded-full bg-[#ff0000]'>
+                        <span className='text-white font-bold text-[18px]'>AN</span>
+                    </div>
+                )
+            }
             <BiMenu className='w-[30px] h-[30px] cursor-pointer'color='red' onClick={handleMobileNav} />
             {
                 isMobileNavOpen && (
-                    <div className="mobile-nav-items fixed top-0 w-full left-0 h-full bg-white flex flex-col justify-center items-center gap-[20px]">
+                    <div className="mobile-nav-items fixed top-0 w-full left-0 h-full bg-white flex flex-col pt-[50px] items-center gap-[20px]">
                         {navList.map((item, index) => (
                             <NavLink 
                                 to={`/${item === "Home" ? "" : item.toLowerCase()}`}

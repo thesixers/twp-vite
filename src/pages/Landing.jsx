@@ -2,40 +2,36 @@ import React from 'react'
 import ToonSlider from '../components/ToonSlider'
 import ToonCard from '../components/ToonCard'
 import ChapterCard from '../components/ChapterCard'
+import { useUserContext } from '../../context/UserProvider'
 
 export default function Landing() {
-  const webtoons = [
-    {title: "the new beginning", genre: "drama", coverImage: "/WELCOME TO TWP (2).png", id: 1},
-    {title: "the new beginning", genre: "drama", coverImage: "/WELCOME TO TWP (2).png", id: 1},
-    {title: "the new beginning", genre: "drama", coverImage: "/WELCOME TO TWP (2).png", id: 1},
-    {title: "the new beginning", genre: "drama", coverImage: "/WELCOME TO TWP (2).png", id: 1}
-  ]
-  const episodes = [
-    {title: "the new beginning", releaseDate: "12th may 2025", coverImage: "/WELCOME TO TWP (2).png", id: 1},
-    {title: "the new beginning", releaseDate: "12th may 2025", coverImage: "/WELCOME TO TWP (2).png", id: 1},
-    {title: "the new beginning", releaseDate: "12th may 2025", coverImage: "/WELCOME TO TWP (2).png", id: 1},
-    {title: "the new beginning", releaseDate: "12th may 2025", coverImage: "/WELCOME TO TWP (2).png", id: 1}
-  ]
+  const { webtoons, episodes, isLoading } = useUserContext()
+
+  React.useEffect(() => {
+
+  }, [])
+
+  
 
   return (
-    <div className='flex flex-col items-center justify-center w-full h-full py-[10px]'>
-      <ToonSlider />
+    <div className='flex flex-col items-center justify-center w-full h-full py-[10px] px-[10px]'>
+      <ToonSlider webtoons={webtoons.slice(0, 4)} />
       <div className='py-[50px] w-[100%] max-w-[1000px]'>
-        <div className="font-bold text-2xl text-gray-700 text-center">
+        <div className="font-bold large-font text-gray-700 text-center">
           New Webtoon
         </div>
         <div className="container">
-          {webtoons.map((toon, index) => (
+          {webtoons.slice(0, 4).map((toon, index) => (
             <ToonCard key={index} toon={toon} />
           ))}
         </div>
       </div>
       <div className='py-[50px] w-[100%] max-w-[1000px]'>
-      <div className="font-bold text-2xl text-gray-700 text-center">
+      <div className="font-bold large-font text-gray-700 text-center">
         New Chapters
       </div>
         <div className="container">
-          {episodes.map((toon, index) => (
+          {episodes.slice(0, 4).map((toon, index) => (
             <ChapterCard key={index} toon={toon} />
           ))}
         </div>

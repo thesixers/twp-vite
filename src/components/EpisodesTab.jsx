@@ -1,7 +1,33 @@
+import axios from 'axios';
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { BiTrash } from 'react-icons/bi';
+import { data, Link, useLocation } from 'react-router-dom'
+import { serverUrl } from '../../requests/apicalls';
+import { useNavigate } from 'react-router-dom';
 
 export default function EpisodesTab({ webtoon }) {
+  const navigate = useNavigate();
+  const location = useLocation()
+  const [showEpDeleteConfirmation, setEpShowDeleteConfirmation] = React.useState(false);
+  const [currentEpisode, setCurrentEpisode] = React.useState(null)
+
+
+  const confirmEpDelete = async () => {
+    if (currentEpisode) {
+      let res = await axios.delete(`${serverUrl}/twp/webtoon/episode/${currentEpisode}`)
+      if(res.data){
+        navigate(location.pathname, {replace: true})
+        setEpShowDeleteConfirmation(false)
+        setCurrentEpisode(null)
+      }
+    }
+  }
+
+  const handleDeleteEpisode = (id) => {
+    setCurrentEpisode(id);
+    setEpShowDeleteConfirmation(true);
+  }
+
 
   if (!webtoon || !webtoon.episodes || webtoon.episodes.length === 0) {
     return (
@@ -31,13 +57,46 @@ export default function EpisodesTab({ webtoon }) {
                     </Link>
                 </div>
                 <div className="right">
-                    <div className="date text-xs text-gray-500">{episode.releaseDate ? new Date(episode.releaseDate).toLocaleDateString() : 'N/A'}</div>
+                    <div className="date text-xs text-gray-500">{episode.releaseDate}</div>
+                    <div 
+                      className="like-button-wrapper  z-10 flex items-center gap-2 cursor-pointer p-2 rounded-lg bg-black/20 hover:bg-black/50 transition-colors"
+                      onClick={() => {handleDeleteEpisode(episode._id)}}
+                      role="button"
+                    >
+                      <BiTrash color='white' className='cursor-pointer'/>
+                    </div>
                 </div>
               </div>
             )
           })
         }
       </div>
+
+      {showEpDeleteConfirmation && (
+            <div className="fixed inset-0 bg-[#ffffff4f] bg-opacity-50 flex items-center justify-center z-50 px-[20px]">
+              <div className="bg-white rounded-lg p-8 max-w-md w-full">
+                <h2 className="text-xl font-bold mb-4 text-gray-800">Confirm Deletion</h2>
+                <p className="text-gray-700 mb-6">Are you sure you want to delete this episode? This action cannot be reversed.</p>
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => {
+                      setCurrentEpisode(null)
+                      setEpShowDeleteConfirmation(false)
+                    }}
+                    className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded mr-2"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={confirmEpDelete}
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
     </div>
   )
 }

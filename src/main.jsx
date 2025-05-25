@@ -10,6 +10,8 @@ import Login from "./pages/Login.jsx"
 import Signup from "./pages/SignUp.jsx"
 import AboutUs from "./pages/AboutUs.jsx"
 import Read from './pages/Read.jsx'
+import Upload from './pages/Upload.jsx'
+import Author from './pages/Author.jsx'
 
 
 const router = createBrowserRouter([
@@ -24,6 +26,9 @@ const router = createBrowserRouter([
       {path: "/login", element: <Login />},
       {path: "/signup", element: <Signup />},
       {path: "/about", element: <AboutUs />},
+      {path: "/webtoons?category=twporiginals", element: <Webtoons />},
+      {path: "/become an author", element: <Upload />},
+      {path: "/mywebtoons", element: <Author />}
     ]
   }
 ])
