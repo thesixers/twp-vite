@@ -6,7 +6,7 @@ import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons'
 import EpisodesTab from '../components/EpisodesTab'
 import ToonDetailsTab from '../components/ToonDetailsTab'
 import CommentsTab from '../components/CommentsTab'
-import { fetchWebtoonDetails, serverUrl } from '../../requests/apicalls'
+import { commentApi, fetchWebtoonDetails, serverUrl } from '../../requests/apicalls'
 import { BiAddToQueue, BiTrash, BiPlus } from 'react-icons/bi'
 import axios from 'axios'
 import { useUserContext } from '../../context/UserProvider'
@@ -24,31 +24,38 @@ export default function Webtoon() {
   const [isLoading, setIsLoading] = useState(true);
   const [newComment, setNewComment] = useState("");
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-  const [showEpisodeUploadForm, setShowEpisodeUploadForm] = useState(false)
+  const [showEpisodeUploadForm, setShowEpisodeUploadForm] = useState(false);
+  const [isEditable, setIsEditable] = useState(false)
 
 
   useEffect(() => {
-    const setWebToonDetails = async () => {
-      if (!params.webtoon_id) {
-        setIsLoading(false);
-      }
-      setIsLoading(true);
-
-      // let { toon, episodes: episodesArray, comments: commentsArray } 
-      let data = await fetchWebtoonDetails(params.webtoon_id)
-      if(!data){
-        setIsLoading(false);
-        return
-      }
-      console.log(data);
-      const { toon, episodes: episodesArray, comments: commentsArray } = data;
-      setWebtoonData({ ...toon, episodes: episodesArray || [], comments: commentsArray || [] });
-      setLikeCount(toon.likes || 0);
-      setIsLoading(false);
-    };
-
+    
     setWebToonDetails();
   }, [params.webtoon_id]);
+
+  const setWebToonDetails = async () => {
+    if (!params.webtoon_id) {
+      setIsLoading(false);
+    }
+    setIsLoading(true);
+
+    // let { toon, episodes: episodesArray, comments: commentsArray } 
+    let data = await fetchWebtoonDetails(params.webtoon_id)
+    if(!data){
+      setIsLoading(false);
+      return
+    }
+    console.log(data);
+    const { toon, episodes: episodesArray, comments: commentsArray } = data;
+    setWebtoonData({ ...toon, episodes: episodesArray || [], comments: commentsArray || [] });
+    setLikeCount(toon.likes || 0);
+    setIsLoading(false);
+    if(toon.uploadAcc === user._id){
+      setIsEditable(true)
+    }
+  };
+
+
 
   const handleLikeClick = () => {
     setIsLiked(!isLiked);
@@ -68,17 +75,19 @@ export default function Webtoon() {
     if (newComment.trim() === "") return;
 
     const optimisticComment = {
-      userId: "currentUserStaticId",
-      username: "Current User", 
+      userId: user ? user._id : "1",
+      username: user ? user.username : "Guest", 
       comment: newComment.trim(),
+      seriesId: webtoonData._id,
     };
 
 
     setWebtoonData(prev => ({ ...prev, comments: [optimisticComment, ...prev.comments] }));
     setNewComment("");
-    // TODO: Send comment to backend API here
-    // e.g., await axios.post(`/api/webtoon/${params.webtoon_id}/comments`, { comment: newComment.trim() });
-    // Handle success/error from API, potentially update/remove optimisticComment
+    let res = await commentApi(optimisticComment)
+    if(res.M){
+      console.log(res.M);
+    }
   };
 
   const handleDeleteToon = async () => {
@@ -133,13 +142,17 @@ export default function Webtoon() {
             <FontAwesomeIcon icon={isLiked ? faHeartSolid : faHeartRegular} className={`text-2xl ${isLiked ? 'text-red-500' : 'text-white'}`} />
             <span className="text-white font-semibold text-lg">{likeCount}</span>
           </div>
-          <div 
+          {
+            isEditable && (
+              <>
+                <div 
             className="like-button-wrapper absolute top-4 right-4 z-10 flex items-center gap-2 cursor-pointer p-2 rounded-lg bg-black/50 hover:bg-black/70 transition-colors"
             onClick={handleDeleteToon}
             role="button"
           >
             <BiTrash color='white' className='cursor-pointer'/>
           </div>
+          
           {showDeleteConfirmation && (
             <div className="fixed inset-0 bg-[#ffffff4f] bg-opacity-50 flex items-center justify-center z-50 px-[20px]">
               <div className="bg-white rounded-lg p-8 max-w-md w-full">
@@ -162,7 +175,6 @@ export default function Webtoon() {
               </div>
             </div>
           )}
-          
           <div 
             className="like-button-wrapper absolute bottom-4 right-4 z-10 flex items-center gap-2 cursor-pointer p-2 rounded-lg bg-black/50 hover:bg-black/70 transition-colors"
             onClick={() => {
@@ -172,6 +184,9 @@ export default function Webtoon() {
           >
             <BiPlus size={25} color='white'/>
           </div>
+              </>
+            )
+          }
         </div>
 
         <div className="other-details-section">
@@ -206,7 +221,7 @@ export default function Webtoon() {
 
         {
           showEpisodeUploadForm &&(
-            <div className='absolute top-0 left-0 right-0 bottom-0 inset-0 bg-[#ffffff4f] bg-opacity-50 flex items-center justify-center z-50 px-[20px]'>
+            <div className='fixed overflow-scroll pt-[10px] inset-0 bg-[#ffffff4f] bg-opacity-50 flex items-center justify-center z-50 px-[20px]'>
               <EpisodeUpload setShowEpisodeUploadForm={setShowEpisodeUploadForm} />
             </div>
           )

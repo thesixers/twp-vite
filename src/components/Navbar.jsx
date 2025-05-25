@@ -16,13 +16,7 @@ export default function Navbar() {
         setWidth(newWidth);
       };
 
-      if(user){
-        if(user.isAuthor){
-            setNavList(["Home", "Webtoons", "Mywebtoons", "About"])
-        }else{
-            setNavList(["Home", "Webtoons", "About"])
-        }
-    }
+      checkUser()
   
       window.addEventListener('resize', handleResize);
   
@@ -32,17 +26,36 @@ export default function Navbar() {
     }, []);
 
     useEffect(() => {
-        if(user){
-            if(user.isAuthor === true){
-                setNavList(["Home", "Webtoons", "Mywebtoons", "About"])
-            }else{
-                setNavList(["Home", "Webtoons", "About"])
-            }
-        }
+        checkUser()
     }, [user])
 
     const handleMobileNav = () => {
         setIsMobileNavOpen(!isMobileNavOpen)
+    }
+
+    const checkUser = () => {
+        if(user){
+
+            if(user.type === "regular"){
+                if(user.isAuthor === true){
+                    setNavList(["Home", "Webtoons", "Mywebtoons", "About"])
+                }
+                else{
+                    setNavList(["Home", "Webtoons", "About"])
+                }
+            }
+
+            if(user.type.includes("admin")){
+                if(user.isAuthor === true){
+                    setNavList(["Home", "Webtoons", "Mywebtoons", "About", "Admin"])
+                }
+                else{
+                    setNavList(["Home", "Webtoons", "About", "Admin"])
+                }
+            }
+
+            
+        }
     }
 
     
@@ -61,17 +74,20 @@ export default function Navbar() {
                         className={({isActive}) => `
                             p-[8px] text-[13px] ${
                             item === "Login" || item === "SignUp"
-                            ? `bg-[#ff0000] text-[#ffff] rounded-[20px] w-[80px] h-[27px] flex justify-center items-center nav-btn-shadow font-bold ${isActive ? "active-btn" : ""}` 
-                            : `nav-item relative hover:text-[#ff0000] font-bold cursor-pointer transition-colors duration-300 ease-in-out ${isActive ? "text-[#ff0000] active" : "text-gray-600"}`
+                            ? `bg-[#e44616] text-[#ffff] rounded-[20px] w-[80px] h-[27px] flex justify-center items-center nav-btn-shadow font-bold ${isActive ? "active-btn" : ""}` 
+                            : `nav-item relative hover:text-[#e44616] font-bold cursor-pointer transition-colors duration-300 ease-in-out ${isActive ? "text-[#e44616] active" : "text-gray-600"}`
                         }`}
+                        // #e44616
                     >
                     {item}
                     </NavLink>
                 ))}
                 {
                     user && (
-                        <div className='border border-[#ff0000] p-[5px] text-center w-[35px] h-[35px] flex justify-center items-center rounded-full bg-[#ff0000]'>
-                            <span className='text-white font-bold text-[18px]'>AN</span>
+                        <div className='border border-[#e44616] p-[5px] text-center w-[35px] h-[35px] flex justify-center items-center rounded-full bg-[#e44616]'>
+                            <span className='text-white font-bold text-[18px]'>{
+                                user.name.split(" ")[0].split("")[0].toUpperCase() + user.name.split(" ")[1].split("")[0].toUpperCase()    
+                            }</span>
                         </div>
                     )
                 }
@@ -80,7 +96,7 @@ export default function Navbar() {
         <div className="mobile-nav flex gap-[20px] items-center">
             {
                 user && (
-                    <div className='border border-[#ff0000] p-[5px] text-center w-[35px] h-[35px] flex justify-center items-center rounded-full bg-[#ff0000]'>
+                    <div className='border border-[#e44616] p-[5px] text-center w-[35px] h-[35px] flex justify-center items-center rounded-full bg-[#e44616]'>
                         <span className='text-white font-bold text-[18px]'>AN</span>
                     </div>
                 )
@@ -93,13 +109,13 @@ export default function Navbar() {
                             <NavLink 
                                 to={`/${item === "Home" ? "" : item.toLowerCase()}`}
                                 key={index}
-                                className={({isActive}) => `nav-item relative hover:text-[#ff0000] font-bold cursor-pointer transition-colors duration-300 ease-in-out ${isActive ? "text-[#ff0000] active" : "text-gray-600"}`}
+                                className={({isActive}) => `nav-item relative hover:text-[#e44616] font-bold cursor-pointer transition-colors duration-300 ease-in-out ${isActive ? "text-[#e44616] active" : "text-gray-600"}`}
                                 onClick={handleMobileNav}
                             >
                             {item}
                             </NavLink>
                         ))}
-                        <BiX className={`w-[30px] h-[30px] cursor-pointer absolute top-5 right-5 text-gray-600 hover:text-[#ff0000]`} onClick={handleMobileNav} />
+                        <BiX className={`w-[30px] h-[30px] cursor-pointer absolute top-5 right-5 text-gray-600 hover:text-[#e44616]`} onClick={handleMobileNav} />
                     </div>
                 )
             }

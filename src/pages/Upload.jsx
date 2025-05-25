@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Plus } from 'lucide-react';
 import { serverUrl } from '../../requests/apicalls';
 import axios from 'axios';
@@ -6,7 +6,7 @@ import { useUserContext } from '../../context/UserProvider';
 import { useNavigate } from 'react-router-dom';
 
 export default function Upload() {
-  const {setUser} = useUserContext()
+  const { setUser, user } = useUserContext()
   const navigate = useNavigate()
   const [form, setForm] = useState({
     title: '',
@@ -17,11 +17,15 @@ export default function Upload() {
     coverImage: null
   });
 
-    // let {title, author, genre, illustrator, description} = req.body;
+  useEffect(() => {
+    if (!user) {
+      navigate('/')
+    }
+  })
 
 
   const [message, setMessage] = useState({ text: '', type: '' });
-  const genres = ['Action', 'Romance', 'Fantasy', 'Horror', 'Comedy', 'Drama'];
+  const genres = ['Supernatural', 'Romance', 'Fantasy', 'Horror', 'Comedy', 'Scifi', "Mini-series"];
   const [coverPreview, setCoverPreview] = useState(null)
 
   const handleChange = (e) => {

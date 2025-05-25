@@ -12,6 +12,7 @@ import AboutUs from "./pages/AboutUs.jsx"
 import Read from './pages/Read.jsx'
 import Upload from './pages/Upload.jsx'
 import Author from './pages/Author.jsx'
+import Admin from './pages/Admin.jsx'
 
 
 const router = createBrowserRouter([
@@ -28,12 +29,11 @@ const router = createBrowserRouter([
       {path: "/about", element: <AboutUs />},
       {path: "/webtoons?category=twporiginals", element: <Webtoons />},
       {path: "/become an author", element: <Upload />},
-      {path: "/mywebtoons", element: <Author />}
+      {path: "/mywebtoons", element: <Author />},
+      {path: "/admin", element: <Admin />}
     ]
   }
 ])
-
-console.log(location)
 
 
 createRoot(document.getElementById('root')).render(

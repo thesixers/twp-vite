@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const serverUrl = 'http://localhost:3001'
+export const serverUrl = 'https://twp2.onrender.com'
 
 export const fetchWebtoonDetails = async (ID) => {
     const abortController = new AbortController();
@@ -9,10 +9,10 @@ export const fetchWebtoonDetails = async (ID) => {
 
     setTimeout(() => {
       abortController.abort();
-    }, 10000);
+    }, 60000);
 
     try {
-      const res = await axios.get(`http://127.0.0.1:3001/twp/webtoon/${ID}`, { signal });
+      const res = await axios.get(`${serverUrl}/twp/webtoon/${ID}`, { signal });
       return res.data;
     } catch (err) {
       console.error("Failed to fetch webtoon details:", err);
@@ -27,7 +27,7 @@ export const fetchWebtoons = async () => {
 
     setTimeout(() => {
       abortController.abort();
-    }, 10000);
+    }, 60000);
 
   try{
     let res = await axios.get(`${serverUrl}/twp/webtoon/fetchtoons`, { signal })
@@ -37,4 +37,23 @@ export const fetchWebtoons = async () => {
     console.error(err) 
     return null
   }
+}
+
+export const commentApi = async ({seriesId, userId, username, comment}) => {
+  axios.defaults.withCredentials = true
+
+  try {
+    let res = await axios.post(`${serverUrl}/twp/webtoon/comment`, {
+      seriesId,
+      userId,
+      username,
+      comment
+    })
+    if(res.data.E) throw new Error(res.data.E);
+    
+    return res.data
+  } catch (error) {
+    console.log(error);
+  }
+
 }

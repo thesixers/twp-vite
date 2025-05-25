@@ -68,9 +68,9 @@ useEffect(() => {
             <input className='w-full h-full p-1 outline-0' onInput={handleSearch} value={searchTerm} onChange={(e) => {setSearchTerm(e.target.value)}} placeholder='Search' />
           </div>
           <div 
-            className='text-[#ff0000] border-[#ff0000] 
+            className='text-[#e44616] border-[#e44616] 
             border-[1px] p-[2px] w-[80px] rounded-[5px]  
-            text-center cursor-pointer hover:bg-[#ff0000] 
+            text-center cursor-pointer hover:bg-[#e44616] 
             duration-300 ease-in-out transition-colors
             hover:text-white'
             onClick={handleFilterClick}

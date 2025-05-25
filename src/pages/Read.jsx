@@ -3,11 +3,14 @@ import { useLocation, useNavigate, Link as RouterLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faList, faGripHorizontal, faAngleDown, faAngleUp, faComments, faTimes } from '@fortawesome/free-solid-svg-icons';
 import CommentsTab from '../components/CommentsTab';
+import { useUserContext } from '../../context/UserProvider';
+import { commentApi } from '../../requests/apicalls';
 
 
 export default function Read() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user } = useUserContext()
 
   const [currentEpisodeData, setCurrentEpisodeData] = useState(null);
   const [webtoonInfo, setWebtoonInfo] = useState(null);
@@ -58,12 +61,10 @@ export default function Read() {
     if (newComment.trim() === "" || !webtoonInfo) return;
 
     const optimisticComment = {
-      _id: `temp-${Date.now()}`,
-      userId: "currentUserStaticId",
-      username: "Current User",
+      userId: user ? user._id : "1",
+      username: user ? user.username : "Guest", 
       comment: newComment.trim(),
-      // webtoonId: webtoonInfo._id, // Useful if your backend needs it explicitly
-      // episodeId: currentEpisodeData._id // If comments were per-episode
+      seriesId: webtoonInfo._id,
     };
 
     // Optimistically update UI
@@ -72,7 +73,7 @@ export default function Read() {
       comments: [optimisticComment, ...(prev.comments || [])]
     }));
     setNewComment("");
-    // send to the backend
+    await commentApi(optimisticComment)
   };
 
   if (isLoading) {

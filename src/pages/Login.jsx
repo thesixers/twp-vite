@@ -1,13 +1,14 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { serverUrl } from '../../requests/apicalls';
+import { useUserContext } from '../../context/UserProvider';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,14 +17,16 @@ export default function Login() {
 
     // Placeholder for real login logic
     try {
-      let res = await axios.post("http://localhost:3001/twp/auth/login", {
+      let res = await axios.post(`${serverUrl}/twp/auth/login`, {
         email,
         password
       }, {withCredentials: true})
       let { E, M } = res.data
       if(E) throw Error(E);
         
-      if(M) navigate('/')
+      if(M){
+        window.location.href = '/'
+      }
     } catch (error) {
       console.log(error);
       setError(error.message);

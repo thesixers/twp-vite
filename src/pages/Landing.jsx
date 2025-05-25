@@ -5,13 +5,15 @@ import ChapterCard from '../components/ChapterCard'
 import { useUserContext } from '../../context/UserProvider'
 
 export default function Landing() {
-  const { webtoons, episodes, isLoading } = useUserContext()
+  const { webtoons, episodes, isLoading, scripture } = useUserContext()
 
   React.useEffect(() => {
 
   }, [])
 
-  
+  if (!webtoons || webtoons.length < 1) {
+    return <div className="flex justify-center items-center h-screen text-red-500">Failed to load webtoon. Please try again.</div>;
+  }
 
   return (
     <div className='flex flex-col items-center justify-center w-full h-full py-[10px] px-[10px]'>
@@ -39,8 +41,8 @@ export default function Landing() {
       </div>
       <div class="scriptures">
         <div class="title">Scripture for the week</div>
-        <div class="bible">Ask and u shall recieve seek and u shall find knock and the door shall be opened onto u</div>
-        <div class="bible-v">Mathew 7:7</div>
+        <div class="bible">{scripture.word}</div>
+        <div class="bible-v">{scripture.book}</div>
       </div>
     </div>
   )

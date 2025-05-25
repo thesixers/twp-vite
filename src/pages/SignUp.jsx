@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Terms from '../components/Terms';
 import axios from 'axios';
+import { serverUrl } from '../../requests/apicalls';
 
 export default function Signup() {
   const [form, setForm] = useState({
@@ -43,7 +44,7 @@ export default function Signup() {
 
     try {
       setLoading(true);
-      let res = await axios.post("http://127.0.0.1:3001/twp/auth/signup", form, { signal })
+      let res = await axios.post(`${serverUrl}/twp/auth/signup`, form, { signal })
       let {E, M } = res.data;
       if(E) throw new Error(E);
       if(M){

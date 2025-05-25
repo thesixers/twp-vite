@@ -12,8 +12,9 @@ export function UserProvider({ children }) {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [token, setToken] = useState([]);
-    const [webtoons, setWebtoons] = useState([]);
+    const [webtoons, setWebtoons] = useState([]); 
     const [episodes, setEpisodes] = useState([]);
+    const [scripture, setScripture] = useState([])
 
 
     useEffect(() => {
@@ -24,21 +25,23 @@ export function UserProvider({ children }) {
               return;
             }
             console.log(res);
-            const { episodes, toonz, user } = res;
+            const { episodes, toonz, user, scriptures } = res;
         
             setUser(user);
             setWebtoons(toonz);
             setEpisodes(episodes);
             setIsLoading(false);
+            setScripture(scriptures);
           };
         
           
           loadWebtoons();
     }, [])
 
-    // if (isLoading) {
-    //     return <div className="flex justify-center items-center h-screen">Fetching webtoons </div>;
-    //   }
+    if (isLoading) {
+        return <div className="flex justify-center items-center h-screen">Fetching webtoons </div>;
+      }
+
     
 
     return (
@@ -55,7 +58,9 @@ export function UserProvider({ children }) {
             webtoons,
             setWebtoons,
             episodes,
-            setEpisodes
+            setEpisodes,
+            scripture,
+            setScripture
         }}
     >
         {children}

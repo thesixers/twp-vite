@@ -1,5 +1,5 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
-import coverImage from "/WELCOME TO TWP (3).png"
+import coverImage from "/maincover.png"
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { useNavigate } from 'react-router-dom';
@@ -39,7 +39,7 @@ export default function ToonSlider({webtoons}) {
               alt={`twp_banner_img`}
               className="toon-image w-full h-full object-cover"
             />
-            <div className="toon-title absolute top-2 left-4 z-10  text-gray-900 text-2xl font-bold rounded-md">
+            <div className="toon-title absolute top-2 left-4 z-10  text-white text-2xl font-bold rounded-md">
               Welcome to TWP 
             </div>
           </div>
