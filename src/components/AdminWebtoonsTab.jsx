@@ -2,7 +2,6 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { BiSearch } from 'react-icons/bi'
 import { useNavigate } from 'react-router-dom'
-import { serverUrl } from '../../requests/apicalls'
 
 export default function AdminWebtoonsTab({toonz, setToonz}) {
     const [subNav, setSubNav] = useState(["all", "pending", "rejected"])
@@ -16,7 +15,7 @@ export default function AdminWebtoonsTab({toonz, setToonz}) {
         console.log(id, status)
         const req = {id, status}
         try {
-            let res = await axios.put(`${serverUrl}/twp/admin/updatetoon`, req, { withCredentials: true})
+            let res = await axios.put('https://twp2.onrender.com/twp/admin/updatetoon', req, { withCredentials: true})
 
             let {E,toons} = res.data;
 

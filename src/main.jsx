@@ -13,6 +13,7 @@ import Read from './pages/Read.jsx'
 import Upload from './pages/Upload.jsx'
 import Author from './pages/Author.jsx'
 import Admin from './pages/Admin.jsx'
+import FourOhFour from './components/FourOFour.jsx'
 
 
 const router = createBrowserRouter([
@@ -31,7 +32,8 @@ const router = createBrowserRouter([
       {path: "/become an author", element: <Upload />},
       {path: "/mywebtoons", element: <Author />},
       {path: "/admin", element: <Admin />}
-    ]
+    ],
+    errorElement: <FourOhFour />
   }
 ])
 

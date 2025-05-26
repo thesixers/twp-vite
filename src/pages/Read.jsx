@@ -166,15 +166,23 @@ export default function Read() {
         {currentEpisodeData.pages && currentEpisodeData.pages.length > 0 ? (
           scrollDirection === 'vertical' ? (
             <div className="flex flex-col items-center pt-2 pb-8 space-y-0">
-              {currentEpisodeData.pages.map((pageUrl, index) => (
-                <img key={index} src={pageUrl} alt={`Page ${index + 1}`} className="max-w-full md:max-w-3xl lg:max-w-[800px] h-auto object-contain block" loading="lazy" />
-              ))}
+              {currentEpisodeData.pages.map((pageUrl, index) => {
+                return(
+                  <img 
+                    key={index} 
+                    src={pageUrl.replace("forestgreen-woodpecker-273365.hostingersite.com", "thewebtoonproject.com")} 
+                    alt={`Page ${index + 1}`} 
+                    className="max-w-full md:max-w-3xl lg:max-w-[800px] h-auto object-contain block" 
+                    loading="lazy" 
+                  />
+                )
+              })}
             </div>
           ) : (
             <div className="flex flex-row h-full items-stretch p-0">
               {currentEpisodeData.pages.map((pageUrl, index) => (
                 <div key={index} className="h-full flex-shrink-0 flex justify-center items-center snap-center">
-                  <img src={pageUrl} alt={`Page ${index + 1}`} className="h-full w-auto object-contain" loading="lazy" />
+                  <img src={pageUrl.replace("forestgreen-woodpecker-273365.hostingersite.com", "thewebtoonproject.com")} alt={`Page ${index + 1}`} className="h-full w-auto object-contain" loading="lazy" />
                 </div>
               ))}
             </div>

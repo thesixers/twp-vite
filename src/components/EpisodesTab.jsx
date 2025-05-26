@@ -1,22 +1,20 @@
 import axios from 'axios';
 import React from 'react'
 import { BiTrash } from 'react-icons/bi';
-import { data, Link, useLocation } from 'react-router-dom'
-import { serverUrl } from '../../requests/apicalls';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 
-export default function EpisodesTab({ webtoon }) {
-  const navigate = useNavigate();
-  const location = useLocation()
+export default function EpisodesTab({ webtoon, setWebtoonData, isEditable }) {
   const [showEpDeleteConfirmation, setEpShowDeleteConfirmation] = React.useState(false);
   const [currentEpisode, setCurrentEpisode] = React.useState(null)
 
 
   const confirmEpDelete = async () => {
     if (currentEpisode) {
-      let res = await axios.delete(`${serverUrl}/twp/webtoon/episode/${currentEpisode}`)
+      let res = await axios.delete(`https://twp2.onrender.com/twp/webtoon/episode/${currentEpisode}`)
+      // let res = await axios.delete(`http://localhost:3001/twp/webtoon/episode/${currentEpisode}`)
       if(res.data){
-        navigate(location.pathname, {replace: true})
+        let newEpisodes = webtoon.episodes.filter(ep => ep._id !== currentEpisode)
+        setWebtoonData({...webtoon, episodes: newEpisodes})
         setEpShowDeleteConfirmation(false)
         setCurrentEpisode(null)
       }
@@ -47,7 +45,7 @@ export default function EpisodesTab({ webtoon }) {
                 <div className="left flex items-center gap-3">
                     <Link state={{ currentEpisode: episode, webtoonData: webtoon }} to={`/read`} className="img-link">
                       <div className="img w-24 h-16 overflow-hidden rounded-md shadow">
-                        <img src={episode.coverImage} alt={episode.title} className="w-full h-full object-cover"/>
+                        <img src={episode.coverImage.replace("forestgreen-woodpecker-273365.hostingersite.com", "thewebtoonproject.com")} alt={episode.title} className="w-full h-full object-cover"/>
                       </div>
                     </Link>
                     <Link state={{ currentEpisode: episode, webtoonData: webtoon }} to={`/read`} className="ep-title-link">
@@ -58,13 +56,17 @@ export default function EpisodesTab({ webtoon }) {
                 </div>
                 <div className="right">
                     <div className="date text-xs text-gray-500">{episode.releaseDate}</div>
-                    <div 
-                      className="like-button-wrapper  z-10 flex items-center gap-2 cursor-pointer p-2 rounded-lg bg-black/20 hover:bg-black/50 transition-colors"
-                      onClick={() => {handleDeleteEpisode(episode._id)}}
-                      role="button"
-                    >
-                      <BiTrash color='white' className='cursor-pointer'/>
-                    </div>
+                    {
+                      isEditable && (
+                        <div 
+                          className="like-button-wrapper  z-10 flex items-center gap-2 cursor-pointer p-2 rounded-lg bg-black/20 hover:bg-black/50 transition-colors"
+                          onClick={() => {handleDeleteEpisode(episode._id)}}
+                          role="button"
+                        >
+                          <BiTrash color='white' className='cursor-pointer'/>
+                        </div>
+                      )
+                    }
                 </div>
               </div>
             )

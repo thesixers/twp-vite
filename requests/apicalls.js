@@ -12,7 +12,8 @@ export const fetchWebtoonDetails = async (ID) => {
     }, 60000);
 
     try {
-      const res = await axios.get(`${serverUrl}/twp/webtoon/${ID}`, { signal });
+      const res = await axios.get(`https://twp2.onrender.com/twp/webtoon/${ID}`, { signal });
+      // const res = await axios.get(`http://localhost:3001/twp/webtoon/${ID}`, { signal });
       return res.data;
     } catch (err) {
       console.error("Failed to fetch webtoon details:", err);
@@ -30,7 +31,8 @@ export const fetchWebtoons = async () => {
     }, 60000);
 
   try{
-    let res = await axios.get(`${serverUrl}/twp/webtoon/fetchtoons`, { signal })
+    let res = await axios.get("https://twp2.onrender.com/twp/webtoon/fetchtoons", { signal })
+    // let res = await axios.get("http://localhost:3001/twp/webtoon/fetchtoons", { signal })
     return res.data
   }
   catch(err){
@@ -43,7 +45,8 @@ export const commentApi = async ({seriesId, userId, username, comment}) => {
   axios.defaults.withCredentials = true
 
   try {
-    let res = await axios.post(`${serverUrl}/twp/webtoon/comment`, {
+    let res = await axios.post('https://twp2.onrender.com/twp/webtoon/comment', {
+      // let res = await axios.post('http://localhost:3001/twp/webtoon/comment', {
       seriesId,
       userId,
       username,

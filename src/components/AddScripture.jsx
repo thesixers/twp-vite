@@ -2,7 +2,6 @@ import React from 'react'
 import { Plus, BookOpenText } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import { serverUrl } from '../../requests/apicalls'
 import { useUserContext } from '../../context/UserProvider'
 
 export default function AddScripture() {
@@ -14,7 +13,7 @@ export default function AddScripture() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            let res = await axios.post(`${serverUrl}/twp/admin/scripture`, {
+            let res = await axios.post('https://twp2.onrender.com/twp/admin/scripture', {
                 book,
                 word
             }, { withCredentials: true })

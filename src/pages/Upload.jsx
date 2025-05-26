@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Plus } from 'lucide-react';
-import { serverUrl } from '../../requests/apicalls';
 import axios from 'axios';
 import { useUserContext } from '../../context/UserProvider';
 import { useNavigate } from 'react-router-dom';
@@ -21,7 +20,12 @@ export default function Upload() {
     if (!user) {
       navigate('/')
     }
-  })
+  }, [])
+
+  useEffect(() => {
+      if(!user) navigate('/')
+    }, [user])
+
 
 
   const [message, setMessage] = useState({ text: '', type: '' });
@@ -61,7 +65,7 @@ export default function Upload() {
     });
 
     try {
-      const response = await axios.post(`${serverUrl}/twp/webtoon`, data, {
+      const response = await axios.post('https://twp2.onrender.com/twp/webtoon', data, {
         withCredentials: true
       })
 

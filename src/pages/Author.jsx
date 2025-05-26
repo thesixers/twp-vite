@@ -1,18 +1,21 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { serverUrl } from '../../requests/apicalls'
 import ToonCard from '../components/ToonCard'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import { useUserContext } from '../../context/UserProvider'
 
 export default function Author() {
   const [myWebtoons, setMyWebtoons] = useState([])
   const [isLoading, setIsLoading] = useState(true)
+  const { user } = useUserContext()
+  const navigate = useNavigate()
+
 
   useEffect(() => {
     const getMyWebtoons = async () => {
       
       try {
-        let res = await axios.get(`${serverUrl}/twp/author`, {withCredentials: true})
+        let res = await axios.get('https://twp2.onrender.com/twp/author', {withCredentials: true})
         console.log(res.data);
         if(res.data.webtoons){
           setMyWebtoons(res.data.webtoons)
@@ -26,6 +29,11 @@ export default function Author() {
 
     getMyWebtoons()
   }, [])
+
+
+  useEffect(() => {
+      if(!user) navigate('/')
+    }, [user])
 
   if (isLoading) {
     return <div className="flex justify-center items-center h-screen">Loading My webtoons...</div>;

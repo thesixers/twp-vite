@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, use } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons'
@@ -15,7 +15,7 @@ import EpisodeUpload from '../components/EpisodeUpload'
 export default function Webtoon() {
   let params = useParams()
   const navigate = useNavigate()
-  const { user } = useUserContext()
+  const { user, setComments } = useUserContext()
   const [webtoonData, setWebtoonData] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0); 
@@ -45,7 +45,7 @@ export default function Webtoon() {
       setIsLoading(false);
       return
     }
-    console.log(data);
+
     const { toon, episodes: episodesArray, comments: commentsArray } = data;
     setWebtoonData({ ...toon, episodes: episodesArray || [], comments: commentsArray || [] });
     setLikeCount(toon.likes || 0);
@@ -83,6 +83,7 @@ export default function Webtoon() {
 
 
     setWebtoonData(prev => ({ ...prev, comments: [optimisticComment, ...prev.comments] }));
+    setComments(prev => [optimisticComment, ...prev])
     setNewComment("");
     let res = await commentApi(optimisticComment)
     if(res.M){
@@ -133,7 +134,7 @@ export default function Webtoon() {
             {title}
           </div>
           <div 
-            className="like-button-wrapper absolute bottom-4 right-16 z-10 flex items-center gap-2 cursor-pointer p-2 rounded-lg bg-black/50 hover:bg-black/70 transition-colors"
+            className={`like-button-wrapper absolute bottom-4 z-10 flex items-center gap-2 cursor-pointer p-2 rounded-lg bg-black/50 hover:bg-black/70 transition-colors ${isEditable ? "right-16" : "right-4"}`}
             onClick={handleLikeClick}
             role="button"
             tabIndex={0} 
@@ -146,12 +147,12 @@ export default function Webtoon() {
             isEditable && (
               <>
                 <div 
-            className="like-button-wrapper absolute top-4 right-4 z-10 flex items-center gap-2 cursor-pointer p-2 rounded-lg bg-black/50 hover:bg-black/70 transition-colors"
-            onClick={handleDeleteToon}
-            role="button"
-          >
-            <BiTrash color='white' className='cursor-pointer'/>
-          </div>
+                  className="like-button-wrapper absolute top-4 right-4 z-10 flex items-center gap-2 cursor-pointer p-2 rounded-lg bg-black/50 hover:bg-black/70 transition-colors"
+                  onClick={handleDeleteToon}
+                  role="button"
+                >
+                  <BiTrash color='white' className='cursor-pointer'/>
+                </div>
           
           {showDeleteConfirmation && (
             <div className="fixed inset-0 bg-[#ffffff4f] bg-opacity-50 flex items-center justify-center z-50 px-[20px]">
@@ -212,7 +213,7 @@ export default function Webtoon() {
           <div className="details-section-content min-h-[350px] rounded-lg">
             {navItems[currentNav] === "Details" && (<ToonDetailsTab details={webtoonData} likeCount={likeCount} isLiked={isLiked}/>)}
 
-            {navItems[currentNav] === "Episodes" && (<EpisodesTab webtoon={webtoonData} />)}
+            {navItems[currentNav] === "Episodes" && (<EpisodesTab webtoon={webtoonData} setWebtoonData={setWebtoonData} isEditable={isEditable} />)}
 
             {navItems[currentNav] === "Comments" && (<CommentsTab handleCommentChange={handleCommentChange} handleSubmitComment={handleSubmitComment} comments={comments}/>)}
           </div>
@@ -222,7 +223,7 @@ export default function Webtoon() {
         {
           showEpisodeUploadForm &&(
             <div className='fixed overflow-scroll pt-[10px] inset-0 bg-[#ffffff4f] bg-opacity-50 flex items-center justify-center z-50 px-[20px]'>
-              <EpisodeUpload setShowEpisodeUploadForm={setShowEpisodeUploadForm} />
+              <EpisodeUpload webtoonID={webtoonData._id} setShowEpisodeUploadForm={setShowEpisodeUploadForm} />
             </div>
           )
         }

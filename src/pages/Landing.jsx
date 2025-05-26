@@ -5,7 +5,7 @@ import ChapterCard from '../components/ChapterCard'
 import { useUserContext } from '../../context/UserProvider'
 
 export default function Landing() {
-  const { webtoons, episodes, isLoading, scripture } = useUserContext()
+  const { webtoons, episodes, scripture } = useUserContext()
 
   React.useEffect(() => {
 
@@ -33,16 +33,16 @@ export default function Landing() {
         New Chapters
       </div>
         <div className="container">
-          {episodes.slice(0, 4).map((toon, index) => (
-            <ChapterCard key={index} toon={toon} />
+          {episodes.slice(0, 4).map((episode, index) => (
+            <ChapterCard key={index} episode={episode} />
           ))}
         </div>
         
       </div>
       <div class="scriptures">
         <div class="title">Scripture for the week</div>
-        <div class="bible">{scripture.word}</div>
-        <div class="bible-v">{scripture.book}</div>
+        <div class="bible">{scripture[0].word}</div>
+        <div class="bible-v">{scripture[0].book}</div>
       </div>
     </div>
   )

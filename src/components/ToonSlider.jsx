@@ -2,7 +2,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import coverImage from "/maincover.png"
 import { faHeart as faHeartSolid } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -50,9 +50,10 @@ export default function ToonSlider({webtoons}) {
             
             return(
               <SwiperSlide key={index}>
+                <Link to={`/webtoon/${_id}`}>
                 <div className="toon-image-wrapper w-full h-full relative overflow-hidden shadow-md">
                   <img
-                    src={coverImage}
+                    src={coverImage.replace("forestgreen-woodpecker-273365.hostingersite.com", "thewebtoonproject.com")}
                     alt={`Cover for ${title}`}
                     className="toon-image w-full h-full object-cover"
                   />
@@ -69,6 +70,7 @@ export default function ToonSlider({webtoons}) {
                     <span className="text-white font-semibold text-lg">{likes}</span>
                   </div>
                 </div>
+                </Link>
               </SwiperSlide>
             )
           })

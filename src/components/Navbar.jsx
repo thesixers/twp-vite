@@ -3,12 +3,13 @@ import { NavLink } from 'react-router-dom'
 import Logo from "/twp_logo-nobg.png"
 import { BiMenu, BiX } from 'react-icons/bi';
 import { useUserContext } from '../../context/UserProvider';
+import axios from 'axios';
 
 export default function Navbar() {
     const [navList, setNavList] = useState(["Home", "Webtoons", "About", "Login", "SignUp"]);
     const [width, setWidth] = React.useState(window.innerWidth)
     const [isMobileNavOpen, setIsMobileNavOpen] = React.useState(false)
-    const { user } = useUserContext()
+    const { user, setUser } = useUserContext()
   
     useEffect(() => {
       const handleResize = () => {
@@ -55,7 +56,14 @@ export default function Navbar() {
             }
 
             
+        }else{
+            setNavList(["Home", "Webtoons", "About", "Login", "SignUp"])
         }
+    }
+
+    const handleLogout = async () => {
+        const res = await axios.get("https://twp2.onrender.com/twp/auth/logout", {withCredentials: true})
+        setUser(null)
     }
 
     
@@ -84,11 +92,19 @@ export default function Navbar() {
                 ))}
                 {
                     user && (
-                        <div className='border border-[#e44616] p-[5px] text-center w-[35px] h-[35px] flex justify-center items-center rounded-full bg-[#e44616]'>
+                        <>
+                            <div
+                            onClick={handleLogout}
+                            className={`bg-[#e44616] cursor-pointer text-[#ffff] rounded-[20px] w-[80px] h-[27px] flex justify-center items-center nav-btn-shadow font-bold p-[8px] text-[13px]`}
+                            >Logout
+                            </div>
+                            <div className='border border-[#e44616] p-[5px] text-center w-[35px] h-[35px] flex justify-center items-center rounded-full bg-[#e44616]'>
                             <span className='text-white font-bold text-[18px]'>{
                                 user.name.split(" ")[0].split("")[0].toUpperCase() + user.name.split(" ")[1].split("")[0].toUpperCase()    
                             }</span>
-                        </div>
+                            </div>
+                            
+                        </>
                     )
                 }
             </div>
@@ -96,12 +112,14 @@ export default function Navbar() {
         <div className="mobile-nav flex gap-[20px] items-center">
             {
                 user && (
-                    <div className='border border-[#e44616] p-[5px] text-center w-[35px] h-[35px] flex justify-center items-center rounded-full bg-[#e44616]'>
+                   <>
+                     <div className='border border-[#e44616] p-[5px] text-center w-[35px] h-[35px] flex justify-center items-center rounded-full bg-[#e44616]'>
                         <span className='text-white font-bold text-[18px]'>AN</span>
                     </div>
+                   </>
                 )
             }
-            <BiMenu className='w-[30px] h-[30px] cursor-pointer'color='red' onClick={handleMobileNav} />
+            <BiMenu className='w-[30px] h-[30px] cursor-pointer'color='#e44616' onClick={handleMobileNav} />
             {
                 isMobileNavOpen && (
                     <div className="mobile-nav-items fixed top-0 w-full left-0 h-full bg-white flex flex-col pt-[50px] items-center gap-[20px]">
@@ -116,6 +134,10 @@ export default function Navbar() {
                             </NavLink>
                         ))}
                         <BiX className={`w-[30px] h-[30px] cursor-pointer absolute top-5 right-5 text-gray-600 hover:text-[#e44616]`} onClick={handleMobileNav} />
+                        <div 
+                        className={`nav-item relative hover:text-[#e44616] font-bold cursor-pointer transition-colors duration-300 ease-in-out text-gray-600`}
+                        onClick={handleLogout}
+                        >Logout</div>
                     </div>
                 )
             }

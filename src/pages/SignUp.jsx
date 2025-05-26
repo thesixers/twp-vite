@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import Terms from '../components/Terms';
 import axios from 'axios';
-import { serverUrl } from '../../requests/apicalls';
 
 export default function Signup() {
   const [form, setForm] = useState({
@@ -44,7 +43,7 @@ export default function Signup() {
 
     try {
       setLoading(true);
-      let res = await axios.post(`${serverUrl}/twp/auth/signup`, form, { signal })
+      let res = await axios.post('https://twp2.onrender.com/twp/auth/signup', form, { signal })
       let {E, M } = res.data;
       if(E) throw new Error(E);
       if(M){
@@ -177,7 +176,7 @@ export default function Signup() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 px-4 bg-red-600 text-white font-medium rounded-md hover:bg-red-700 disabled:bg-red-300"
+            className="w-full py-2 px-4 bg-[#e44616] text-white font-medium rounded-md hover:bg-[#e44616c5] disabled:bg-red-300"
           >
             {loading ? 'Creating account...' : 'Sign Up'}
           </button>

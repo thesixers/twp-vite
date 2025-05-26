@@ -7,7 +7,6 @@ import AdminUsersTab from '../components/AdminUsersTab'
 import AdminWebtoonsTab from '../components/AdminWebtoonsTab'
 import AdminMessageTab from '../components/AdminMessageTab'
 import axios from 'axios'
-import { serverUrl } from '../../requests/apicalls'
 import AddScripture from '../components/AddScripture'
 
 export default function Admin() {
@@ -32,7 +31,7 @@ export default function Admin() {
     const fetchStuff = async () => {
       try {
         
-        let res = await axios.get(`${serverUrl}/twp/admin`, { withCredentials: true})
+        let res = await axios.get('https://twp2.onrender.com/twp/admin', { withCredentials: true})
         if(res.data.toonz){
           setToonz(res.data.toonz)
         }
@@ -58,6 +57,11 @@ export default function Admin() {
     setPendingToonz(pendingToonz)
     setRejectedToonz(rejectedToonz)
   }, [toonz])
+
+  useEffect(() => {
+    if(!user) navigate('/')
+    if(!user.type.includes('admin')) navigate('/')
+  }, [user])
 
 
 

@@ -1,8 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { serverUrl } from '../../requests/apicalls';
-import { useUserContext } from '../../context/UserProvider';
+import { Link } from 'react-router-dom';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -17,7 +15,8 @@ export default function Login() {
 
     // Placeholder for real login logic
     try {
-      let res = await axios.post(`${serverUrl}/twp/auth/login`, {
+      let res = await axios.post('https://twp2.onrender.com/twp/auth/login', {
+        // let res = await axios.post('http://localhost:3001/twp/auth/login', {
         email,
         password
       }, {withCredentials: true})
@@ -88,7 +87,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 px-4 bg-red-600 text-white font-medium rounded-md hover:bg-red-700 disabled:bg-red-300"
+            className="w-full py-2 px-4 bg-[#e44616] cursor-pointer text-white font-medium rounded-md hover:bg-[#e44616c7] disabled:bg-red-300"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </button>

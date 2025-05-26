@@ -6,12 +6,12 @@ export default function ToonCard({toon:{title, genre, coverImage, _id}}) {
     <div class="webToon">
         <div class="img-cover">
             <Link to={`/webtoon/${_id}`}>
-                <img src={coverImage} alt={`${title}`}/>
+                <img src={coverImage.replace("forestgreen-woodpecker-273365.hostingersite.com", "thewebtoonproject.com")} alt={`${title}`}/>
             </Link>
         </div>
         <div class="webToonDetails">
             <div class="name">
-                <a href={`/webtoon/${_id}`} class="title">{title}</a>
+                <Link to={`/webtoon/${_id}`} class="title">{title}</Link>
             </div> 
             <span class="genres">{genre}</span>
         </div>
