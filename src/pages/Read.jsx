@@ -62,7 +62,7 @@ export default function Read() {
 
     const optimisticComment = {
       userId: user ? user._id : "1",
-      username: user ? user.username : "Guest", 
+      username: user ? user.name : "Guest", 
       comment: newComment.trim(),
       seriesId: webtoonInfo._id,
     };

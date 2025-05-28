@@ -54,9 +54,9 @@ useEffect(() => {
     return <div className="flex justify-center items-center h-screen">Loading webtoon details...</div>;
   }
 
-  if (!webtoons || webtoons.length < 1) {
-    return <div className="flex justify-center items-center h-screen text-red-500">Failed to load webtoon. Please try again.</div>;
-  }
+  // if (!webtoons || webtoons.length < 1) {
+  //   return <div className="flex justify-center items-center h-screen text-red-500">Failed to load webtoon. Please try again.</div>;
+  // }
 
   return (
     <div className='w-full relative'>
@@ -82,7 +82,7 @@ useEffect(() => {
               <div className='filter-list-cover absolute bg-white top-[40px] right-0 w-[100px] border-gray-300 border'>
               <div className="w-full h-full p-[20px] flex flex-col gap-[10px] justify-center items-center">
                   {
-                    genres.map((genre, index) => {
+                    genres.length > 0 && (genres.map((genre, index) => {
                       return (
                         <div className='text-gray-700 cursor-pointer transition-colors duration-300 ease-in-out hover:text-[#ff0000]' 
                           onClick={() => setSelectedGenre(genre)}
@@ -91,7 +91,7 @@ useEffect(() => {
                           {genre}
                         </div>
                       )
-                    })
+                    }))
                   }
               </div>
               </div>
@@ -100,9 +100,13 @@ useEffect(() => {
         </div>
       </div>
       <div className="alltoons">
-          {filteredWebtoons.map((toon, index) => (
-            <ToonCard key={index} toon={toon} />
-          ))}
+          {
+            filteredWebtoons.length > 0 && (
+              filteredWebtoons.map((toon, index) => (
+                <ToonCard key={index} toon={toon} />
+              ))
+            )
+          }
       </div>
     </div>
   )

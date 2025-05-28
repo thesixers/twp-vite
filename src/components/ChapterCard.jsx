@@ -10,25 +10,34 @@ export default function ChapterCard({episode}) {
 
     useEffect(() => {
         // find the webtoon that has the episode 
-        let webtoon = webtoons.find(toon => toon?.chapters.includes(_id))
-        const toonEpisodes = []
-        const toonComments = []
-        webtoon?.chapters.forEach((chapter) => {
-            toonEpisodes.push(episodes.find(ep => ep?._id === chapter))
-        })
-        webtoon?.comments.forEach((comment) => {
-            toonComments.push(comments.find(com => com?._id === comment))
-        })
-        setWebtoonData({...webtoon, episodes: toonEpisodes || [], comments: toonComments || []})
-        setCurrentEpisode(episode)
+        filterWebtoonData()
     }, [])
+
+
+
+    const filterWebtoonData = () => {
+        if(webtoons){
+            let webtoon = webtoons.find(toon => toon?.chapters.includes(_id))
+            const toonEpisodes = []
+            const toonComments = []
+            webtoon?.chapters.forEach((chapter) => {
+                toonEpisodes.push(episodes.find(ep => ep?._id === chapter))
+            })
+            webtoon?.comments.forEach((comment) => {
+                toonComments.push(comments.find(com => com?._id === comment))
+            })
+            setWebtoonData({...webtoon, episodes: toonEpisodes || [], comments: toonComments || []})
+            setCurrentEpisode(episode)
+        }
+    }
+
 
 
   return (
     <div class="webToon">
         <div class="img-cover">
             <Link to="/read" state={{webtoonData, currentEpisode}}>
-                <img src={coverImage} alt={`${title}`}/>
+                <img src={coverImage.replace("forestgreen-woodpecker-273365.hostingersite.com", "thewebtoonproject.com")} alt={`${title}`}/>
             </Link>
         </div>
         <div class="webToonDetails">

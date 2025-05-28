@@ -1,6 +1,8 @@
 import React from 'react'
+import { useUserContext } from '../../context/UserProvider'
 
 export default function CommentsTab({newComment, handleCommentChange, handleSubmitComment, comments}) {
+    const { user } = useUserContext()
   return (
     <div className="comments animate-fadeIn">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center md:text-left">Leave a Comment</h2>
@@ -16,7 +18,7 @@ export default function CommentsTab({newComment, handleCommentChange, handleSubm
                 ></textarea>
                 <button
                 type="submit"
-                className="mt-3 px-6 py-2 bg-[#ff0000] text-white font-semibold rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
+                className="mt-3 px-6 py-2 bg-[#e44616] text-white font-semibold rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors"
                 >
                 Post Comment
                 </button>
@@ -29,12 +31,14 @@ export default function CommentsTab({newComment, handleCommentChange, handleSubm
                     <div className="flex items-start space-x-3">
                         <div className="flex-shrink-0">
                         {/* Placeholder for user avatar - you can replace with an actual image if available */}
-                        <div className="w-10 h-10 rounded-full bg-[#ff0000] flex items-center justify-center text-white font-semibold">
-                            {c.username ? c.username.charAt(0).toUpperCase() : 'U'}
+                        <div className="w-10 h-10 rounded-full bg-[#e44616] flex items-center justify-center text-white font-semibold">
+                            {c.username ? c.username.charAt(0).toUpperCase() : 'GU'}
                         </div>
                         </div>
                         <div className="flex-1">
-                        <p className="text-sm font-semibold text-gray-900">{c.username || 'Anonymous'}</p>
+                        <p className="text-sm font-semibold text-gray-900">{
+                            !user ? "Guest" : user._id === c.userId ? "me" : c.username ? c.username : "Guest"
+                        }</p>
                         {/* Consider adding a timestamp here if available, e.g., <p className="text-xs text-gray-500">Posted 2 hours ago</p> */}
                         <p className="text-gray-700 mt-1 whitespace-pre-line">{c.comment}</p>
                         </div>

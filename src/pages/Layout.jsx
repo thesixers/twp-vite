@@ -40,9 +40,8 @@ export default function Layout() {
           strokeWidth={0.3}
         />
 
-        {/* Ensure Navbar, Outlet, and Footer are on top of watermarks if needed using z-index */}
         <Navbar className="relative z-10" />
-        <main className='min-h-screen relative z-10'>
+        <main className='min-h-screen relative z-10 '>
             <Outlet/>
         </main>
         <Footer className="relative z-10" />

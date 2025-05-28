@@ -11,9 +11,9 @@ export default function Landing() {
 
   }, [])
 
-  if (!webtoons || webtoons.length < 1) {
-    return <div className="flex justify-center items-center h-screen text-red-500">Failed to load webtoon. Please try again.</div>;
-  }
+  // if (!webtoons || webtoons.length < 1) {
+  //   return <div className="flex justify-center items-center h-screen text-red-500">Failed to load webtoon. Please try again.</div>;
+  // }
 
   return (
     <div className='flex flex-col items-center justify-center w-full h-full py-[10px] px-[10px]'>
@@ -23,9 +23,13 @@ export default function Landing() {
           New Webtoon
         </div>
         <div className="container">
-          {webtoons.slice(0, 4).map((toon, index) => (
-            <ToonCard key={index} toon={toon} />
-          ))}
+          {
+            webtoons.length > 0 && (
+              webtoons.slice(0, 4).map((toon, index) => (
+                <ToonCard key={index} toon={toon} />
+              ))
+            )
+          }
         </div>
       </div>
       <div className='py-[50px] w-[100%] max-w-[1000px]'>
@@ -33,16 +37,20 @@ export default function Landing() {
         New Chapters
       </div>
         <div className="container">
-          {episodes.slice(0, 4).map((episode, index) => (
-            <ChapterCard key={index} episode={episode} />
-          ))}
+          {
+            episodes.length > 0 && (
+              episodes.slice(0, 4).map((episode, index) => (
+                <ChapterCard key={index} episode={episode} />
+              ))
+            )
+          }
         </div>
         
       </div>
       <div class="scriptures">
         <div class="title">Scripture for the week</div>
-        <div class="bible">{scripture[0].word}</div>
-        <div class="bible-v">{scripture[0].book}</div>
+        <div class="bible">{scripture[0]?.word}</div>
+        <div class="bible-v">{scripture[0]?.book}</div>
       </div>
     </div>
   )

@@ -75,8 +75,8 @@ export default function Webtoon() {
     if (newComment.trim() === "") return;
 
     const optimisticComment = {
-      userId: user ? user._id : "1",
-      username: user ? user.username : "Guest", 
+      userId: user ? user?._id : "1",
+      username: user ? user?.name : "Guest", 
       comment: newComment.trim(),
       seriesId: webtoonData._id,
     };

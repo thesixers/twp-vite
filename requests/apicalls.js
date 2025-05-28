@@ -45,8 +45,8 @@ export const commentApi = async ({seriesId, userId, username, comment}) => {
   axios.defaults.withCredentials = true
 
   try {
-    let res = await axios.post('https://twp2.onrender.com/twp/webtoon/comment', {
-      // let res = await axios.post('http://localhost:3001/twp/webtoon/comment', {
+    // let res = await axios.post('https://twp2.onrender.com/twp/webtoon/comment', {
+      let res = await axios.post('http://localhost:3001/twp/webtoon/comment', {
       seriesId,
       userId,
       username,
