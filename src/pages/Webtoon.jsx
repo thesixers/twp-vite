@@ -6,7 +6,7 @@ import { faHeart as faHeartRegular } from '@fortawesome/free-regular-svg-icons'
 import EpisodesTab from '../components/EpisodesTab'
 import ToonDetailsTab from '../components/ToonDetailsTab'
 import CommentsTab from '../components/CommentsTab'
-import { commentApi, fetchWebtoonDetails, serverUrl } from '../../requests/apicalls'
+import { commentApi, fetchWebtoonDetails, likeWebtoon, serverUrl } from '../../requests/apicalls'
 import { BiAddToQueue, BiTrash, BiPlus } from 'react-icons/bi'
 import axios from 'axios'
 import { useUserContext } from '../../context/UserProvider'
@@ -29,7 +29,6 @@ export default function Webtoon() {
 
 
   useEffect(() => {
-    
     setWebToonDetails();
   }, [params.webtoon_id]);
 
@@ -50,20 +49,30 @@ export default function Webtoon() {
     setWebtoonData({ ...toon, episodes: episodesArray || [], comments: commentsArray || [] });
     setLikeCount(toon.likes || 0);
     setIsLoading(false);
-    if(toon.uploadAcc === user._id){
+    if(toon.uploadAcc === user?._id){
       setIsEditable(true)
+    }
+    if(toon?.likesArray.includes(user?._id)){
+      setIsLiked(true)
     }
   };
 
 
 
   const handleLikeClick = () => {
+    if(!user) return;
     setIsLiked(!isLiked);
     if (!isLiked) {
       setLikeCount(likeCount + 1);
+      webtoonData.likes += 1;
+      webtoonData?.likesArray.push(user._id)
     } else {
       setLikeCount(likeCount - 1);
+      webtoonData.likes -= 1;
+      let newLikesArray = webtoonData?.likesArray.filter(id => id !== user._id);
+      webtoonData.likesArray = newLikesArray
     }
+    likeWebtoon(webtoonData._id)
   };
 
   const handleCommentChange = (event) => {
@@ -126,7 +135,7 @@ export default function Webtoon() {
       <section className='w-[100%] h-[100%] max-w-[1000px] mx-auto px-[15px]'>
         <div className="toon-image-wrapper w-full h-[350px] relative overflow-hidden rounded-lg shadow-md">
           <img
-            src={coverImage}
+            src={coverImage.replace("?", "%3F")}
             alt={`Cover for ${title}`}
             className="toon-image w-full h-full object-cover"
           />

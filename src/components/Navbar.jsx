@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import Logo from "/twp_logo-nobg.png";
 import { BiMenu, BiX } from "react-icons/bi";
 import { useUserContext } from "../../context/UserProvider";
@@ -57,6 +57,8 @@ export default function Navbar() {
           setNavList(["Home", "Webtoons", "About", "Admin"]);
         }
       }
+    }else{
+      setNavList(["Home", "Webtoons", "About", "Login", "SignUp"]);
     }
   };
 
@@ -69,9 +71,9 @@ export default function Navbar() {
 
   return (
     <div className="w-full p-[10px] flex justify-between items-center bg-white nav">
-      <div className="logo w-[100px] h-[100px] flex justify-center items-center">
+      <NavLink to="/" className="logo w-[100px] h-[100px] flex justify-center items-center">
         <img src={Logo} alt="logo" className="w-full h-full" />
-      </div>
+      </NavLink>
       {width > 650 ? (
         <div className="nav-items gap-[25px] flex items-center px-[15px]">
           {navList.map((item, index) => (

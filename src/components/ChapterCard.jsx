@@ -37,7 +37,7 @@ export default function ChapterCard({episode}) {
     <div class="webToon">
         <div class="img-cover">
             <Link to="/read" state={{webtoonData, currentEpisode}}>
-                <img src={coverImage.replace("forestgreen-woodpecker-273365.hostingersite.com", "thewebtoonproject.com")} alt={`${title}`}/>
+                <img src={coverImage.replace("forestgreen-woodpecker-273365.hostingersite.com", "thewebtoonproject.com").replace("?", "%3F")} alt={`${title}`}/>
             </Link>
         </div>
         <div class="webToonDetails">

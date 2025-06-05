@@ -16,7 +16,7 @@ export default function Login() {
     // Placeholder for real login logic
     try {
       let res = await axios.post('https://twp2.onrender.com/twp/auth/login', {
-        // let res = await axios.post('http://localhost:3001/twp/auth/login', {
+      // let res = await axios.post('http://localhost:3001/twp/auth/login', {
         email,
         password
       }, {withCredentials: true})
@@ -28,6 +28,7 @@ export default function Login() {
       }
     } catch (error) {
       console.log(error);
+      if(error.response.data.E) return setError(error.response.data.E);
       setError(error.message);
     }finally{
       setLoading(false);
@@ -79,9 +80,9 @@ export default function Login() {
               <input type="checkbox" className="text-red-600 border-gray-300 rounded" />
               Remember me
             </label>
-            <a href="#" className="text-red-600 hover:underline">
+            <Link to="/forgotpass" className="text-red-600 hover:underline">
               Forgot password?
-            </a>
+            </Link>
           </div>
 
           <button

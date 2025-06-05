@@ -962,25 +962,6 @@ background-color: #dc3545; /* Red */
   @media (max-width: 390px) {
    
 }
-/* @media (prefers-color-scheme: dark) {
-    :root{
-        --plain--: #1a1a1a;
-        color: white;
-    }
-    .search input{
-        background-color: #1a1a1a;
-        color: #fff;
-    }
-    .show-script-form{
-        color: #1a1a1a;
-    }
-    .admin-messages .modal-content,
-    .admin-messages .message-card,
-    .users-wrapper .responsive-table td{
-        background-color: #1a1a1a;
-    }
-} */
-
 
 .add--scrip-container{
     background-color: rgba(240, 248, 255, 0.137);
@@ -1124,5 +1105,27 @@ background-color: #dc3545; /* Red */
     100%{
         transform: rotate(360deg);
         opacity: 0;
+    }
+}
+
+.fmessage-box::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 100%;
+    left: 0;
+    background-color: rgb(44, 175, 44);
+    height: 3px;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: fluid 10s ease-out;
+}
+
+@keyframes fluid {
+    0%{
+        transform: scaleX(1);
+    }
+    100%{
+        transform: scaleX(0);
     }
 }

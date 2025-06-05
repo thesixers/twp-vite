@@ -45,7 +45,7 @@ export default function EpisodesTab({ webtoon, setWebtoonData, isEditable }) {
                 <div className="left flex items-center gap-3">
                     <Link state={{ currentEpisode: episode, webtoonData: webtoon }} to={`/read`} className="img-link">
                       <div className="img w-24 h-16 overflow-hidden rounded-md shadow">
-                        <img src={episode.coverImage.replace("forestgreen-woodpecker-273365.hostingersite.com", "thewebtoonproject.com")} alt={episode.title} className="w-full h-full object-cover"/>
+                        <img src={episode.coverImage.replace("forestgreen-woodpecker-273365.hostingersite.com", "thewebtoonproject.com").replace("?", "%3F")} alt={episode.title} className="w-full h-full object-cover"/>
                       </div>
                     </Link>
                     <Link state={{ currentEpisode: episode, webtoonData: webtoon }} to={`/read`} className="ep-title-link">

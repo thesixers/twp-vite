@@ -53,7 +53,7 @@ export default function ToonSlider({webtoons}) {
                 <Link to={`/webtoon/${_id}`}>
                 <div className="toon-image-wrapper w-full h-full relative overflow-hidden shadow-md">
                   <img
-                    src={coverImage.replace("forestgreen-woodpecker-273365.hostingersite.com", "thewebtoonproject.com")}
+                    src={coverImage.replace("forestgreen-woodpecker-273365.hostingersite.com", "thewebtoonproject.com").replace("?", "%3F")}
                     alt={`Cover for ${title}`}
                     className="toon-image w-full h-full object-cover"
                   />

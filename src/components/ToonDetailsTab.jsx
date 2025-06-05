@@ -32,7 +32,7 @@ export default function ToonDetailsTab({likeCount, isLiked, details:{author, ill
             <h3 className="text-sm font-semibold text-gray-500 mb-2">Genres</h3>
             {/* Center genre tags on small screens */}
             <div className="flex flex-wrap gap-2 justify-center md:justify-start">
-            {genre.split(',').map(genre => (
+            {genre.replace("miniservice", "mini-series").split(',').map(genre => (
                 <span key={genre} className="bg-red-100 text-red-700 text-xs font-semibold px-3 py-1 rounded-full">{genre}</span>
             ))}
             </div>

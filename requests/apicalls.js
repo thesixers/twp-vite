@@ -23,8 +23,9 @@ export const fetchWebtoonDetails = async (ID) => {
 
 export const fetchWebtoons = async () => {
   axios.defaults.withCredentials = true
-  const abortController = new AbortController();
+  const abortController = new AbortController();  
   const signal = abortController.signal;
+  
 
     setTimeout(() => {
       abortController.abort();
@@ -46,7 +47,7 @@ export const commentApi = async ({seriesId, userId, username, comment}) => {
 
   try {
     let res = await axios.post('https://twp2.onrender.com/twp/webtoon/comment', {
-      // let res = await axios.post('http://localhost:3001/twp/webtoon/comment', {
+    // let res = await axios.post('http://localhost:3001/twp/webtoon/comment', {
       seriesId,
       userId,
       username,
@@ -59,4 +60,14 @@ export const commentApi = async ({seriesId, userId, username, comment}) => {
     console.log(error);
   }
 
+}
+
+export const likeWebtoon = async (toonid) =>{
+  axios.defaults.withCredentials = true
+  try {
+    // let res = await axios.put(`http://localhost:3001/twp/webtoon/like/${toonid}`)
+    let res = await axios.put(`https://twp2.onrender.com/twp/webtoon/like/${toonid}`)
+  } catch (err) {
+    console.log(err.message);
+  }
 }

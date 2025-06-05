@@ -170,7 +170,7 @@ export default function Read() {
                 return(
                   <img 
                     key={index} 
-                    src={pageUrl.replace("forestgreen-woodpecker-273365.hostingersite.com", "thewebtoonproject.com")} 
+                    src={pageUrl.replace("forestgreen-woodpecker-273365.hostingersite.com", "thewebtoonproject.com").replace("?", "%3F")} 
                     alt={`Page ${index + 1}`} 
                     className="max-w-full md:max-w-3xl lg:max-w-[800px] h-auto object-contain block" 
                     loading="lazy" 
@@ -182,7 +182,7 @@ export default function Read() {
             <div className="flex flex-row h-full items-stretch p-0">
               {currentEpisodeData.pages.map((pageUrl, index) => (
                 <div key={index} className="h-full flex-shrink-0 flex justify-center items-center snap-center">
-                  <img src={pageUrl.replace("forestgreen-woodpecker-273365.hostingersite.com", "thewebtoonproject.com")} alt={`Page ${index + 1}`} className="h-full w-auto object-contain" loading="lazy" />
+                  <img src={pageUrl.replace("forestgreen-woodpecker-273365.hostingersite.com", "thewebtoonproject.com").replace("?", "%3F")} alt={`Page ${index + 1}`} className="h-full w-auto object-contain" loading="lazy" />
                 </div>
               ))}
             </div>

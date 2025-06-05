@@ -29,10 +29,11 @@ export default function Upload() {
 
 
   const [message, setMessage] = useState({ text: '', type: '' });
-  const genres = ['Supernatural', 'Romance', 'Fantasy', 'Horror', 'Comedy', 'Scifi', "Mini-series"];
+  const genres = ['Supernatural', 'Romance', 'Fantasy', 'Horror', 'Comedy', 'Scifi', "Mini-series", "Adventure", "Fantasy", "Drama"];
   const [coverPreview, setCoverPreview] = useState(null)
 
   const handleChange = (e) => {
+    console.log(e.target.value);
     const { name, value, files } = e.target;
     if (name === 'genre') {
       const selectedGenres = form.genre.includes(value)
@@ -151,14 +152,14 @@ export default function Upload() {
               <label
                 key={g}
                 className={`flex items-center space-x-2 border px-3 py-1 rounded-full text-sm cursor-pointer ${
-                  form.genre.includes(g) ? 'bg-red-100 text-red-700 border-red-300' : 'bg-white text-gray-700'
+                  form.genre.includes(g.toLowerCase()) ? 'bg-red-100 text-red-700 border-red-300' : 'bg-white text-gray-700'
                 }`}
               >
                 <input
                   type="checkbox"
                   name="genre"
-                  value={g}
-                  checked={form.genre.includes(g)}
+                  value={g.toLowerCase()}
+                  checked={form.genre.includes(g.toLowerCase())}
                   onChange={handleChange}
                   className="accent-red-600"
                 />

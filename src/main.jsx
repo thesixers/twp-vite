@@ -14,6 +14,7 @@ import Upload from './pages/Upload.jsx'
 import Author from './pages/Author.jsx'
 import Admin from './pages/Admin.jsx'
 import FourOhFour from "./components/FourOFour.jsx"
+import ForgotPass from './pages/ForgotPass.jsx'
 
 
 const router = createBrowserRouter([
@@ -31,7 +32,8 @@ const router = createBrowserRouter([
       {path: "/webtoons?category=twporiginals", element: <Webtoons />},
       {path: "/become an author", element: <Upload />},
       {path: "/mywebtoons", element: <Author />},
-      {path: "/admin", element: <Admin />}
+      {path: "/admin", element: <Admin />},
+      {path: "/forgotpass", element: <ForgotPass />}
     ],
     errorElement: <FourOhFour/>
   }

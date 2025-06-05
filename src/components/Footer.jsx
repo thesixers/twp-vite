@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from "react-router-dom"
-import ig from "/instagram.png"
 import tk from "/tik-tok.png"
 import fb from "/facebook.png"
+import yt from "/yt.png"
 import { useUserContext } from '../../context/UserProvider'
 
 export default function Footer() {
@@ -26,15 +26,12 @@ export default function Footer() {
             })
           }
         </div>
-          <div className="m-auto flex justify-center items-center gap-[10px] p-[10px]">
-            <a href="" target="_blank" className='socials'>
-              <img src={ig} alt="" />
+          <div className="m-auto flex justify-center items-center gap-[10px] p-[10px]" title='Youtube'>
+            <a href="https://www.youtube.com/@TheWebtoonProject" target="_blank" className='socials'>
+              <img src={yt} alt="" />
             </a>
-            <a href="" target="_blank" className='socials'>
+            <a href="https://www.tiktok.com/@the_webtoon_project?lang=en" target="_blank" className='socials' title='TikTok'>
               <img src={tk} alt="" />
-            </a>
-            <a href="" target="_blank" className='socials'>
-              <img src={fb} alt="" />
             </a>
           </div>
       </footer>

@@ -138,7 +138,7 @@ export default function EpisodeUpload({setShowEpisodeUploadForm, webtoonID}) {
                     <button
                       type="button"
                       onClick={() => handleRemovePage(idx)}
-                      className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 hidden group-hover:block"
+                      className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5"
                     >
                       ✕
                     </button>
