@@ -11,10 +11,6 @@ export default function Landing() {
 
   }, [])
 
-  // if (!webtoons || webtoons.length < 1) {
-  //   return <div className="flex justify-center items-center h-screen text-red-500">Failed to load webtoon. Please try again.</div>;
-  // }
-
   return (
     <div className='flex flex-col items-center justify-center w-full h-full py-[10px] px-[10px]'>
       <ToonSlider webtoons={webtoons.slice(0, 4)} />

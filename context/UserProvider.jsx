@@ -40,7 +40,10 @@ export function UserProvider({ children }) {
     }, [])
 
     if (isLoading) {
-        return <div className="flex justify-center items-center h-screen">Fetching webtoons </div>;
+        return <div className="flex flex-col justify-center items-center h-screen gap-[20px]">
+            <div className="bg-white border-[10px] w-[80px] h-[80px] rounded-full border-gray-200 border-t-[#fc9677] spin"></div>
+            <div className="text-gray-400">loading page...</div>
+        </div>;
       }
 
     
