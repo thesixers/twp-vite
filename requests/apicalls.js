@@ -1,6 +1,8 @@
 import axios from "axios";
 
 export const serverUrl = 'https://twp2.onrender.com'
+// export const serverUrl = "http://localhost:3001";
+// export const serverUrl = "http://192.168.43.225:3001";
 
 export const fetchWebtoonDetails = async (ID) => {
     const abortController = new AbortController();
@@ -12,8 +14,7 @@ export const fetchWebtoonDetails = async (ID) => {
     }, 60000);
 
     try {
-      const res = await axios.get(`https://twp2.onrender.com/twp/webtoon/${ID}`, { signal });
-      // const res = await axios.get(`http://localhost:3001/twp/webtoon/${ID}`, { signal });
+      const res = await axios.get(`${serverUrl}/twp/webtoon/${ID}`, { signal });
       return res.data;
     } catch (err) {
       console.error("Failed to fetch webtoon details:", err);
@@ -32,8 +33,7 @@ export const fetchWebtoons = async () => {
     }, 60000);
 
   try{
-    let res = await axios.get("https://twp2.onrender.com/twp/webtoon/fetchtoons", { signal })
-    // let res = await axios.get("http://localhost:3001/twp/webtoon/fetchtoons", { signal })
+    let res = await axios.get(`${serverUrl}/twp/webtoon/fetchtoons`, { signal })
     return res.data
   }
   catch(err){
@@ -46,8 +46,7 @@ export const commentApi = async ({seriesId, userId, username, comment}) => {
   axios.defaults.withCredentials = true
 
   try {
-    let res = await axios.post('https://twp2.onrender.com/twp/webtoon/comment', {
-    // let res = await axios.post('http://localhost:3001/twp/webtoon/comment', {
+    let res = await axios.post(`${serverUrl}/twp/webtoon/comment`, {
       seriesId,
       userId,
       username,
@@ -65,8 +64,7 @@ export const commentApi = async ({seriesId, userId, username, comment}) => {
 export const likeWebtoon = async (toonid) =>{
   axios.defaults.withCredentials = true
   try {
-    // let res = await axios.put(`http://localhost:3001/twp/webtoon/like/${toonid}`)
-    let res = await axios.put(`https://twp2.onrender.com/twp/webtoon/like/${toonid}`)
+    await axios.put(`${serverUrl}/twp/webtoon/like/${toonid}`)
   } catch (err) {
     console.log(err.message);
   }

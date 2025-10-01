@@ -9,7 +9,6 @@ export default function Navbar() {
   const [navList, setNavList] = useState([
     "Home",
     "Webtoons",
-    "About",
     "Login",
     "SignUp",
   ]);
@@ -44,21 +43,21 @@ export default function Navbar() {
     if (user) {
       if (user.type === "regular") {
         if (user.isAuthor === true) {
-          setNavList(["Home", "Webtoons", "Mywebtoons", "About"]);
+          setNavList(["Home", "Webtoons", "Mywebtoons"]);
         } else {
-          setNavList(["Home", "Webtoons", "About"]);
+          setNavList(["Home", "Webtoons"]);
         }
       }
 
       if (user.type.includes("admin")) {
         if (user.isAuthor === true) {
-          setNavList(["Home", "Webtoons", "Mywebtoons", "About", "Admin"]);
+          setNavList(["Home", "Webtoons", "Mywebtoons", "Admin"]);
         } else {
-          setNavList(["Home", "Webtoons", "About", "Admin"]);
+          setNavList(["Home", "Webtoons", "Admin"]);
         }
       }
     }else{
-      setNavList(["Home", "Webtoons", "About", "Login", "SignUp"]);
+      setNavList(["Home", "Webtoons", "Login", "SignUp"]);
     }
   };
 
@@ -70,7 +69,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className="w-full p-[10px] flex justify-between items-center bg-white nav">
+    <div className="w-full px-[10px] border-b border-gray-200 flex justify-between items-center bg-white">
       <NavLink to="/" className="logo w-[100px] h-[100px] flex justify-center items-center">
         <img src={Logo} alt="logo" className="w-full h-full" />
       </NavLink>

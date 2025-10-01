@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import ToonCard from "../components/ToonCard";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/UserProvider";
 import { Plus } from "lucide-react";
