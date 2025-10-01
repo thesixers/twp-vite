@@ -79,6 +79,14 @@
   align-items: center;
 }
 
+@keyframes dropdown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-dropdown {
+  animation: dropdown 200ms ease-out forwards;
+}
+
 .swiper-slide img {
   display: block;
   width: 100%;
@@ -170,7 +178,7 @@
 }
 
 footer {
-  background: #e44616;
+  /* background: #e44616; */
 }
 .foot-nav {
   transition: 0.3s ease-in-out;

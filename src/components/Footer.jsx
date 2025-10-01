@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { X } from "lucide-react";
 import { useUserContext } from "../../context/UserProvider";
 import yt from "/yt.png";
 import tk from "/tik-tok.png";
+import PopupMessage from "./PopupMessage"
 
 export default function Footer() {
   const navigate = useNavigate();
@@ -24,9 +24,9 @@ export default function Footer() {
   }, [user]);
 
   return (
-    <footer className="bg-white border-t border-gray-200 py-8 px-4">
+    <footer className="p-2 rounded-lg relative z-10 shadow-lg border-t border-t-gray-100 bg-white">
       {/* Social Media (moved above) */}
-      <div className="flex justify-center gap-6 mb-6">
+      <div className="flex justify-center gap-6 p-2">
         <a
           href="https://www.youtube.com/@TheWebtoonProject"
           target="_blank"
@@ -46,7 +46,7 @@ export default function Footer() {
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex flex-wrap justify-center gap-6 mb-6">
+      <nav className="flex flex-wrap justify-center gap-3 px-2">
         {navList.map((item, index) => (
           <Link
             key={index}
@@ -57,8 +57,7 @@ export default function Footer() {
                 ? `/${item.toLowerCase()}`
                 : ""
             }
-            className="relative text-[15px] font-medium text-gray-00 border-r border-orange-600 px-1 cursor-pointer transition-colors duration-300
-                       after:absolute after:left-0 after:-bottom-1 after:h-[2px] after:w-0 after:bg-[#e44616] after:transition-all after:duration-300 hover:after:w-full"
+            className="relative text-sm font-medium text-gray-500 hover:text-gray-600  px-1 cursor-pointer transition-colors duration-300"
             onClick={() => {
               if (item === "Publish") {
                 if (user) {
@@ -75,48 +74,12 @@ export default function Footer() {
       </nav>
 
       {/* Copyright */}
-      <div className="text-center text-sm text-gray-00">
-        © {new Date().getFullYear()}{" "}
-          The Webtoon Project
+      <div className="text-center text-[10px] p-0.5 text-gray-300">
+        © {new Date().getFullYear()} The Webtoon Project. All rights reserved.
       </div>
 
       {/* Popup Notice */}
-      {toggleMessage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 px-4">
-          <div className="bg-white rounded-2xl shadow-lg p-6 max-w-sm w-full relative">
-            <X
-              className="absolute top-3 right-3 text-gray-500 cursor-pointer hover:text-[#e44616] transition"
-              onClick={() => setToggleMessage(false)}
-            />
-            <h2 className="text-xl font-semibold text-center text-[#e44616] mb-3">
-              Notice
-            </h2>
-            <p className="text-gray-700 text-center mb-6">
-              You must have an account or login to become a creator on <span className="text-[#e44616] font-semibold">TWP</span>.
-            </p>
-            <div className="flex gap-3 flex-col sm:flex-row">
-              <button
-                className="w-full py-2 rounded-lg bg-[#e44616] text-white font-medium transition hover:bg-[#c63a12]"
-                onClick={() => {
-                  setToggleMessage(false);
-                  navigate("/login");
-                }}
-              >
-                Login
-              </button>
-              <button
-                className="w-full py-2 rounded-lg bg-[#e44616] text-white font-medium transition hover:bg-[#c63a12]"
-                onClick={() => {
-                  setToggleMessage(false);
-                  navigate("/signup");
-                }}
-              >
-                Sign Up
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      {toggleMessage && <PopupMessage setToggleMessage={setToggleMessage} navigate={navigate} />}
     </footer>
   );
 }

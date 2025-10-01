@@ -40,11 +40,11 @@ export default function Layout() {
           strokeWidth={0.3}
         />
 
-        <Navbar className="relative z-10" />
+        <Navbar/>
         <main className='min-h-screen relative z-10 '>
             <Outlet/>
         </main>
-        <Footer className="relative z-10" />
+        <Footer/>
     </div>
     </UserProvider>
   )

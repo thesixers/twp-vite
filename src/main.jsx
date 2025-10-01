@@ -30,7 +30,7 @@ const router = createBrowserRouter([
       {path: "/signup", element: <Signup />},
       {path: "/about", element: <AboutUs />},
       {path: "/webtoons?category=twporiginals", element: <Webtoons />},
-      {path: "/become an author", element: <Upload />},
+      {path: "/publish", element: <Upload />},
       {path: "/mywebtoons", element: <Author />},
       {path: "/admin", element: <Admin />},
       {path: "/forgotpass", element: <ForgotPass />}

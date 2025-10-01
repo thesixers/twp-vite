@@ -3,6 +3,9 @@ import ToonSlider from "../components/ToonSlider";
 import ToonCard from "../components/ToonCard";
 import ChapterCard from "../components/ChapterCard";
 import { useUserContext } from "../../context/UserProvider";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGreaterThan } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 export default function Landing() {
   const { webtoons, episodes, scripture } = useUserContext();
@@ -16,27 +19,54 @@ export default function Landing() {
 
       {/* Trending Toons */}
       <section className="py-16 w-full max-w-[1200px] px-4 md:px-6 lg:px-8">
-        <h2 className="text-2xl md:text-3xl font-extrabold text-gray-800 text-center mb-10">
-          <span className="text-orange-500">Trending</span> Toons
-        </h2>
+        <div className="flex justify-between p-4 items-center mb-5">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-gray-800 text-center">
+            <span className="text-orange-500">Trending</span> Toons
+          </h2>
+          <Link to="/webtoons" className="text-sm text-gray-500">
+            view all
+            <FontAwesomeIcon
+              icon={faGreaterThan}
+              className="text-gray-500 "
+              width={20}
+              height={20}
+            />
+          </Link>
+        </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
           {webtoons.length > 0 &&
-            webtoons.slice(0, 8).map((toon, index) => (
-              <ToonCard key={index} toon={toon} />
-            ))}
+            webtoons
+              .slice(0, 8)
+              .map((toon, index) => <ToonCard key={index} toon={toon} />)}
         </div>
       </section>
 
       {/* Trending Episodes */}
-      <section className="py-16 w-full max-w-[1200px] px-4 md:px-6 lg:px-8 bg-white rounded-3xl shadow-sm">
-        <h2 className="text-2xl md:text-3xl font-extrabold text-gray-800 text-center mb-10">
-          <span className="text-orange-500">Trending</span> Episodes
-        </h2>
+      <section
+        id="episodes"
+        className="py-10 w-full max-w-[1200px] px-4 md:px-6 lg:px-8 bg-white rounded-3xl shadow-sm"
+      >
+        <div className="flex justify-between p-4 items-center mb-5">
+          <h2 className="text-2xl md:text-3xl font-extrabold text-gray-800 text-center">
+            <span className="text-orange-500">Trending</span> Episodes
+          </h2>
+          <Link to="#episodes" className="text-sm text-gray-500">
+            View all{" "}
+            <FontAwesomeIcon
+              icon={faGreaterThan}
+              className="text-gray-500 "
+              width={10}
+              height={20}
+            />
+          </Link>
+        </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
           {episodes.length > 0 &&
-            episodes.slice(0, 4).map((episode, index) => (
-              <ChapterCard key={index} episode={episode} />
-            ))}
+            episodes
+              .slice(0, 4)
+              .map((episode, index) => (
+                <ChapterCard key={index} episode={episode} />
+              ))}
         </div>
       </section>
 

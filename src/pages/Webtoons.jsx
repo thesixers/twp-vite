@@ -65,18 +65,29 @@ export default function Webtoons() {
     setIsFilterOpen(false);
   };
 
+  const returnJsx = () => {
+    let n = selectedGenre.length;
+    let nd = Math.floor(n/2);
+    let t = selectedGenre.slice(0, nd);
+    let m = selectedGenre.slice(nd);
+    return (<span><span className="text-orange-500">{t.charAt(0).toUpperCase() + t.slice(1)}</span>{m}</span>)
+  }
+
+  returnJsx()
+
   return (
     <div className="w-full px-4 md:px-10 py-8">
       {/* Header */}
       <div className="flex flex-wrap justify-between items-center mb-8 gap-4">
         <h1 className="font-bold text-2xl md:text-3xl flex-1 md:text-left text-center text-gray-800">
-          {selectedGenre === "all"
-            ? "All Webtoons"
-            : selectedGenre.toUpperCase()}
+        {selectedGenre === "all" && (<span><span className="text-orange-500">To</span>ons</span>) }
+        {
+         selectedGenre !== "all" && returnJsx()
+        }
         </h1>
 
         {/* Search + Filter */}
-        <div className="flex items-center gap-3 relative border ">
+        <div className="flex items-center gap-3 relative">
           {/* Search Box */}
           <div className="flex items-center bg-white border border-gray-300 rounded-md px-3 py-1 w-[230px] md:w-[300px] shadow-sm">
             <BiSearch className="text-gray-400 mr-2" size={18} />

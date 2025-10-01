@@ -4,6 +4,8 @@ import Logo from "/twp_logo-nobg.png";
 import { BiMenu, BiX } from "react-icons/bi";
 import { useUserContext } from "../../context/UserProvider";
 import axios from "axios";
+import { UserCircle2 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [navList, setNavList] = useState([
@@ -15,6 +17,7 @@ export default function Navbar() {
   const [width, setWidth] = React.useState(window.innerWidth);
   const [isMobileNavOpen, setIsMobileNavOpen] = React.useState(false);
   const { user, setUser } = useUserContext();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleResize = () => {
@@ -40,25 +43,8 @@ export default function Navbar() {
   };
 
   const checkUser = () => {
-    if (user) {
-      if (user.type === "regular") {
-        if (user.isAuthor === true) {
-          setNavList(["Home", "Webtoons", "Mywebtoons"]);
-        } else {
-          setNavList(["Home", "Webtoons"]);
-        }
-      }
-
-      if (user.type.includes("admin")) {
-        if (user.isAuthor === true) {
-          setNavList(["Home", "Webtoons", "Mywebtoons", "Admin"]);
-        } else {
-          setNavList(["Home", "Webtoons", "Admin"]);
-        }
-      }
-    }else{
-      setNavList(["Home", "Webtoons", "Login", "SignUp"]);
-    }
+    if (user) return setNavList(["Home", "Webtoons"]);
+    return setNavList(["Home", "Webtoons", "Login", "SignUp"]);
   };
 
   const handleLogout = async () => {
@@ -69,10 +55,13 @@ export default function Navbar() {
   };
 
   return (
-    <div className="w-full px-[10px] border-b border-gray-200 flex justify-between items-center bg-white">
-      <NavLink to="/" className="logo w-[100px] h-[100px] flex justify-center items-center">
-        <img src={Logo} alt="logo" className="w-full h-full" />
-      </NavLink>
+    <div className="w-full px-[10px] relative z-[1000] border-b border-gray-200 flex justify-between items-center bg-white rounded-md">
+      <Link
+        to="/"
+        className="logo w-[80px] h-[80px] flex justify-center items-center"
+      >
+        <img src="/twp.png" alt="logo" className="w-full h-full" />
+      </Link>
       {width > 650 ? (
         <div className="nav-items gap-[25px] flex items-center px-[15px]">
           {navList.map((item, index) => (
@@ -91,24 +80,42 @@ export default function Navbar() {
                                       : "text-gray-600"
                                   }`
                             }`}
-              // #e44616
             >
               {item}
             </NavLink>
           ))}
           {user && (
             <>
-              <div
-                onClick={handleLogout}
-                className={`bg-[#e44616] cursor-pointer text-[#ffff] rounded-[20px] w-[80px] h-[27px] flex justify-center items-center nav-btn-shadow font-bold p-[8px] text-[13px]`}
-              >
-                Logout
-              </div>
-              <div className="border border-[#e44616] p-[5px] text-center w-[35px] h-[35px] flex justify-center items-center rounded-full bg-[#e44616]">
-                <span className="text-white font-bold text-[18px]">
-                  {user.name.split(" ")[0].split("")[0].toUpperCase() +
-                    user.name.split(" ")[1].split("")[0].toUpperCase()}
-                </span>
+              <div className="p-[5px] relative text-center w-[35px] h-[35px] flex justify-center items-center rounded-full bg-white cursor-pointer">
+                <UserCircle2 />
+                <div className="absolute right-[-25px] top-[50px] mt-2 w-48 rounded-lg bg-white shadow-lg border border-gray-200 animate-dropdown">
+                  <ul className="py-2 text-sm text-gray-700">
+                    <li>
+                      <button
+                        onClick={() => navigate("/mywebtoons")}
+                        className="w-full text-left px-4 py-2 hover:bg-orange-100 hover:text-orange-600 transition"
+                      >
+                        My Collection
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={() => navigate("/admin")}
+                        className="w-full text-left px-4 py-2 hover:bg-orange-100 hover:text-orange-600 transition"
+                      >
+                        Admin
+                      </button>
+                    </li>
+                    <li>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-2 text-red-500 hover:bg-red-50 transition"
+                      >
+                        Logout
+                      </button>
+                    </li>
+                  </ul>
+                </div>
               </div>
             </>
           )}
