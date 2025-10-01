@@ -37,6 +37,7 @@ export default function ToonCard({
           className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500 ease-in-out"
           src={CoverImage}
           alt={title}
+          loading="lazy"
         />
 
         {/* Gradient Overlay */}

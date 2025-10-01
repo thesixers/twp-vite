@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { useUserContext } from "../../context/UserProvider";
 import axios from "axios";
-import { Home, LogIn, UserCircle2 } from "lucide-react";
+import { UserCircle2 } from "lucide-react";
 import UserModal from "./UserModal";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [navList, setNavList] = useState(["Home", "Toons"]);
   const { user, setUser } = useUserContext();
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
+
 
   const handleLogout = async () => {
     await axios.get("https://twp2.onrender.com/twp/auth/logout", {
@@ -55,7 +58,7 @@ export default function Navbar() {
           )}
 
           {
-            !user && <button className="border p-1 px-2 rounded-md bg-[#e44616] text-white border-none">Log in</button>
+            !user && <button onClick={() => navigate("/login")} className="border p-1 px-2 rounded-md bg-[#e44616] text-white border-none">Log in</button>
           }
         </div>
     </div>

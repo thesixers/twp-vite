@@ -28,6 +28,7 @@ export default function ToonSlider({ webtoons }) {
             src={coverImage}
             alt="twp_banner_img"
             className="w-full h-full object-cover"
+            loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
           <div className="absolute bottom-10 left-6 text-white">
@@ -58,6 +59,7 @@ export default function ToonSlider({ webtoons }) {
                     .replace("?", "%3F")}
                   alt={`Cover for ${title}`}
                   className="w-full h-full object-cover"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
 
