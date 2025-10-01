@@ -85,7 +85,7 @@ export default function Read() {
       <div className="flex flex-col justify-center items-center h-screen text-center p-4 bg-gray-900 text-white">
         <h1 className="text-2xl font-bold mb-4 text-[#ff0000]">Error Loading Episode</h1>
         <p className="text-gray-300 mb-6">Could not load the episode data. Please try again or go back.</p>
-        <RouterLink to={webtoonInfo && webtoonInfo._id ? `/webtoon/${webtoonInfo._id}` : "/webtoons"} className="bg-[#ff0000] hover:bg-[#cc0000] text-white font-semibold py-2 px-4 rounded transition-colors">
+        <RouterLink to={webtoonInfo && webtoonInfo._id ? `/toon/${webtoonInfo._id}` : "/toons"} className="bg-[#ff0000] hover:bg-[#cc0000] text-white font-semibold py-2 px-4 rounded transition-colors">
           Go Back
         </RouterLink>
       </div>

@@ -26,7 +26,7 @@ export default function ToonCard({
   return (
     <div className="max-w-[250px] w-full bg-inherit  duration-300 overflow-hidden border-none">
       {/* Image Section */}
-      <Link to={`/webtoon/${_id}`}>
+      <Link to={`/toon/${_id}`}>
       <div className="relative aspect-[5/6] overflow-hidden border-gray-100 group rounded-sm">
         {diffDays <= 21 && (
           <span class="px-2 py-0.5 rounded-sm absolute top-1 left-1 bg-orange-100 text-orange-600 text-xs font-semibold">

@@ -11,6 +11,7 @@ export default function Layout() {
 
   return (
     <UserProvider>
+        <Navbar/>
       <div className='layout w-full h-full  text-gray-800 relative overflow-hidden'>
         {/* Watermarks for a fun touch */}
         <LayoutGrid
@@ -39,8 +40,6 @@ export default function Layout() {
           size={600}
           strokeWidth={0.3}
         />
-
-        <Navbar/>
         <main className='min-h-screen relative z-10 '>
             <Outlet/>
         </main>

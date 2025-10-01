@@ -23,7 +23,7 @@ export default function Landing() {
           <h2 className="text-2xl md:text-3xl font-extrabold text-gray-800 text-center">
             <span className="text-orange-500">Trending</span> Toons
           </h2>
-          <Link to="/webtoons" className="text-sm text-gray-500">
+          <Link to="/toons" className="text-sm text-gray-500">
             view all
             <FontAwesomeIcon
               icon={faGreaterThan}

@@ -13,16 +13,16 @@ export default function Author() {
   useEffect(() => {
     const getMyWebtoons = async () => {
       try {
-        let res = await axios.get("https://twp2.onrender.com/twp/author", {
+        const res = await axios.get("https://twp2.onrender.com/twp/author", {
           withCredentials: true,
         });
-        console.log(res.data);
         if (res.data.webtoons) {
           setMyWebtoons(res.data.webtoons);
-          setIsLoading(false);
         }
       } catch (error) {
-        console.log(error);
+        console.error("Failed to fetch webtoons:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -31,59 +31,103 @@ export default function Author() {
 
   useEffect(() => {
     if (!user) navigate("/");
-  }, [user]);
+  }, [user, navigate]);
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        Loading My webtoons...
+      <div className="flex justify-center items-center h-screen text-gray-500">
+        Loading your webtoons...
       </div>
     );
   }
 
   return (
-    <div className="w-full relative">
-      <div className="header flex flex-wrap px-[20px] toons-header-container justify-between items-center w-full">
-        <h1 className="font-bold text-2xl text-gray-700 text-center all-wt-text">
-          All Webtoons
+    <div className="w-full relative p-4">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="font-bold text-2xl text-gray-800">
+          My Webtoons
         </h1>
       </div>
-      <div className="alltoons">
-        {myWebtoons.map((toon, index) => (
-          <div class="webToon" key={index}>
-            <div class="img-cover relative">
-              <Link to={`/webtoon/${toon._id}`}>
-                <img src={toon.coverImage} alt={`${toon.title}`} />
-              </Link>
-              <div
-                className={`absolute z-50 top-2 left-1 rounded-[20px] text-xs p-1 ${
-                  toon.status === "approved"
-                    ? "text-green-700 bg-green-100"
-                    : toon.status === "pending"
-                    ? "text-yellow-700 bg-yellow-100"
-                    : "text-red-700 bg-red-100"
-                } `}
-              >
-                {toon.status}
-              </div>
-            </div>
-            <div class="webToonDetails">
-              <div class="name">
-                <a href={`/webtoon/${toon._id}`} class="title">
-                  {toon.title}
-                </a>
-              </div>
-              <span class="genres">{toon.genre}</span>
-            </div>
-          </div>
-        ))}
-      </div>
 
+      {/* Webtoon Grid */}
+      {myWebtoons.length > 0 ? (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+          {myWebtoons.map((toon) => {
+            const diffDays = Math.floor(
+              (new Date() - new Date(toon.createdAt)) / (1000 * 60 * 60 * 24)
+            );
+
+            return (
+              <div
+                key={toon._id}
+                className="max-w-[250px] w-full bg-inherit border-none rounded-md overflow-hidden"
+              >
+                {/* Image Section */}
+                <Link to={`/webtoon/${toon._id}`}>
+                  <div className="relative aspect-[5/6] overflow-hidden group">
+                    {/* "New" badge */}
+                    {diffDays <= 21 && (
+                      <span className="px-2 py-0.5 rounded-sm absolute top-2 left-2 bg-orange-100 text-orange-600 text-xs font-semibold">
+                        New
+                      </span>
+                    )}
+
+                    {/* Status badge */}
+                    <span
+                      className={`absolute top-2 right-2 rounded-full text-xs px-2 py-0.5 font-medium shadow-sm ${
+                        toon.status === "approved"
+                          ? "text-green-700 bg-green-100"
+                          : toon.status === "pending"
+                          ? "text-yellow-700 bg-yellow-100"
+                          : "text-red-700 bg-red-100"
+                      }`}
+                    >
+                      {toon.status}
+                    </span>
+
+                    <img
+                      className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500 ease-in-out"
+                      src={toon.coverImage}
+                      alt={toon.title}
+                    />
+
+                    {/* Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  </div>
+
+                  {/* Content Section */}
+                  <div className="p-3 flex flex-col gap-1">
+                    <h2 className="text-md font-semibold text-gray-800 hover:text-orange-600 transition-colors line-clamp-1">
+                      {toon.title}
+                    </h2>
+                    <span className="text-sm text-orange-600 font-medium line-clamp-1">
+                      {toon.genre}
+                    </span>
+                  </div>
+                </Link>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center text-gray-500 py-20">
+          <p className="text-lg">You haven’t created any webtoons yet.</p>
+          <button
+            onClick={() => navigate("/become an author")}
+            className="mt-4 px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-600 transition"
+          >
+            Create Your First Webtoon
+          </button>
+        </div>
+      )}
+
+      {/* Floating Add Button */}
       <button
-        className="fixed bottom-[50px] right-[20px] w-[30px] h-[30px] rounded-[50px] bg-[#e44616] items-center cursor-pointer  flex justify-center"
-        onClick={() => navigate("/become an author")}
+        className="fixed bottom-6 right-6 w-12 h-12 rounded-full bg-orange-600 hover:bg-orange-600 text-white flex items-center justify-center shadow-lg transition-colors"
+        onClick={() => navigate("/publish")}
       >
-        <Plus color="white" />
+        <Plus size={22} />
       </button>
     </div>
   );
