@@ -3,17 +3,18 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/UserProvider";
 import { Plus } from "lucide-react";
+import { serverUrl } from "../../requests/apicalls";
 
 export default function Author() {
   const [myWebtoons, setMyWebtoons] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const navigate = useNavigate();
 
   useEffect(() => {
     const getMyWebtoons = async () => {
       try {
-        const res = await axios.get("https://twp2.onrender.com/twp/author", {
+        const res = await axios.get(`${serverUrl}/twp/author`, {
           withCredentials: true,
         });
         if (res.data.webtoons) {
@@ -21,6 +22,13 @@ export default function Author() {
         }
       } catch (error) {
         console.error("Failed to fetch webtoons:", error);
+        if(error.response){
+          let status = error.response.status;
+          if (status === 401 || status === 403) {
+            setUser(null);
+            navigate("/");
+          }
+        }
       } finally {
         setIsLoading(false);
       }
@@ -64,7 +72,7 @@ export default function Author() {
                 className="max-w-[250px] w-full bg-inherit border-none rounded-md overflow-hidden"
               >
                 {/* Image Section */}
-                <Link to={`/webtoon/${toon._id}`}>
+                <Link to={`/toon/${toon._id}`}>
                   <div className="relative aspect-[5/6] overflow-hidden group">
                     {/* "New" badge */}
                     {diffDays <= 21 && (
@@ -114,7 +122,7 @@ export default function Author() {
         <div className="flex flex-col items-center justify-center text-gray-500 py-20">
           <p className="text-lg">You haven’t created any webtoons yet.</p>
           <button
-            onClick={() => navigate("/become an author")}
+            onClick={() => navigate("/publish")}
             className="mt-4 px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-600 transition"
           >
             Create Your First Webtoon

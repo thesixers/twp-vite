@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ToonCard from "../components/ToonCard";
 import { BiSearch, BiChevronDown } from "react-icons/bi";
-import { useUserContext } from "../../context/UserProvider";
+import { serverUrl } from "../../requests/apicalls";
+import axios from "axios";
 
 export default function Webtoons() {
-  const { webtoons } = useUserContext();
-
+  const [webtoons, setWebtoons] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [genres] = useState([
     "all",
@@ -25,9 +25,22 @@ export default function Webtoons() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState("all");
 
+  const [page, setPage] = useState(0);
+  const pageLimit = 20;
+  const [hasMore, setHasMore] = useState(true);
+  const loadingRef = useRef(null);
+  const [fetching, setFetching] = useState(false);
+  const [fetchingError, setFetchingError] = useState(true);
+  
+
   useEffect(() => {
     setFilteredWebtoons(webtoons);
   }, [webtoons]);
+
+  useEffect(() => {
+    if(page === 0) return;
+    fetchWebtoons();
+  }, [page]);
 
   // search
   const handleSearch = (e) => {
@@ -66,24 +79,66 @@ export default function Webtoons() {
   };
 
   const returnJsx = () => {
-    let n = selectedGenre.length;
-    let nd = Math.floor(n/2);
-    let t = selectedGenre.slice(0, nd);
-    let m = selectedGenre.slice(nd);
-    return (<span><span className="text-orange-500">{t.charAt(0).toUpperCase() + t.slice(1)}</span>{m}</span>)
+    const n = Math.floor(selectedGenre.length / 2);
+    const [t, m] = [selectedGenre.slice(0, n), selectedGenre.slice(n)];
+    
+    return (
+      <span>
+        <span className="text-orange-500">
+          {t.charAt(0).toUpperCase() + t.slice(1)}
+        </span>
+        {m}
+      </span>
+    );
+  };
+
+  // fetch webtoons
+  const fetchWebtoons = async () => {
+    if(!hasMore || fetching) return;
+    setFetching(true);
+    setFetchingError(false);
+    try{
+      let res = await axios.get(`${serverUrl}/twp/webtoon?page=${page}&limit=${pageLimit}`);
+      if(res.data){
+        const { toonz, pages } = res.data;
+        setWebtoons((prevToons) => [...prevToons, ...toonz]);
+        if(page >= pages) {
+          setHasMore(false);
+        }
+      }
+    }catch (error) {
+      console.error("Error fetching webtoons:", error);
+      setFetchingError(true);
+    }finally{
+      setFetching(false);
+    }
   }
 
-  returnJsx()
+  useEffect(() => {
+    if(!loadingRef.current) return;
+    const Observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && hasMore) {
+        setPage((prev) => prev + 1);
+      }
+    }, {threshold: 1.0});
+
+    Observer.observe(loadingRef.current);
+
+    return () => Observer.disconnect();
+  }, [hasMore])
+  
 
   return (
     <div className="w-full px-4 md:px-10 py-8">
       {/* Header */}
       <div className="flex flex-wrap justify-between items-center mb-8 gap-4">
         <h1 className="font-bold text-2xl md:text-3xl flex-1 md:text-left text-center text-gray-800">
-        {selectedGenre === "all" && (<span><span className="text-orange-500">To</span>ons</span>) }
-        {
-         selectedGenre !== "all" && returnJsx()
-        }
+          {selectedGenre === "all" && (
+            <span>
+              <span className="text-orange-500">To</span>ons
+            </span>
+          )}
+          {selectedGenre !== "all" && returnJsx()}
         </h1>
 
         {/* Search + Filter */}
@@ -115,7 +170,9 @@ export default function Webtoons() {
                   <li
                     key={index}
                     className={`px-4 py-2 text-sm text-gray-700 hover:bg-[#fff3ef] hover:text-[#e44616] cursor-pointer transition ${
-                      selectedGenre === genre ? "font-semibold text-[#e44616]" : ""
+                      selectedGenre === genre
+                        ? "font-semibold text-[#e44616]"
+                        : ""
                     }`}
                     onClick={() => handleFilter(genre)}
                   >
@@ -140,6 +197,11 @@ export default function Webtoons() {
           </div>
         )}
       </div>
+
+      { hasMore && <div className="border text-center border-gray-100" ref={loadingRef}>
+        { fetching && <p className="text-gray-500 py-2">Loading more toons...</p> }
+        { fetchingError && <p className="text-red-500 py-2">Error fetching toons <button onClick={fetchWebtoons} className="cursor-pointer px-5 py-1 bg-red-600 text-white rounded-md text-sm font-semibold hover:bg-red-700 transition-colors">retry</button></p> }
+      </div> }
     </div>
   );
 }

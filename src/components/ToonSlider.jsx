@@ -43,7 +43,7 @@ export default function ToonSlider({ webtoons }) {
       </SwiperSlide>
 
       {/* Dynamic Webtoons */}
-      {webtoons.map((toon, index) => {
+      { webtoons.length > 0 && webtoons.map((toon, index) => {
         const { title, coverImage, _id, likes } = toon;
 
         return (

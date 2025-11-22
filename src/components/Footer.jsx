@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useUserContext } from "../../context/UserProvider";
 import yt from "/yt.png";
@@ -9,19 +9,16 @@ export default function Footer() {
   const navigate = useNavigate();
   const { user } = useUserContext();
 
-  const [navList, setNavList] = useState([
+  const navList = [
     "Home",
-    "Webtoons",
+    "Toons",
     "About",
     "Login",
     "SignUp",
     "Publish",
-  ]);
+  ]
   const [toggleMessage, setToggleMessage] = useState(false);
 
-  useEffect(() => {
-    if (user) setNavList(["Home", "Webtoons", "About", "Become an Author"]);
-  }, [user]);
 
   return (
     <footer className="p-2 rounded-lg relative z-10 shadow-lg border-t border-t-gray-100 bg-white">
@@ -48,34 +45,26 @@ export default function Footer() {
       {/* Navigation Links */}
       <nav className="flex flex-wrap justify-center gap-3 px-2">
         {navList.map((item, index) => (
-          <Link
+          <button
             key={index}
-            to={
-              item !== "Publish"
-                ? `/${item === "Home" ? "" : item.toLowerCase()}`
-                : user
-                ? `/${item.toLowerCase()}`
-                : ""
-            }
             className="relative text-sm font-medium text-gray-500 hover:text-gray-600  px-1 cursor-pointer transition-colors duration-300"
             onClick={() => {
               if (item === "Publish") {
-                if (user) {
-                  navigate("/Publish");
-                } else {
-                  setToggleMessage(true);
-                }
+                user ? navigate("/publish") : setToggleMessage(true);
+                return;
               }
+              navigate(`/${item === "Home" ? "" : item.toLowerCase()}`)
             }}
           >
             {item}
-          </Link>
+          </button>
         ))}
       </nav>
 
       {/* Copyright */}
-      <div className="text-center text-[10px] p-0.5 text-gray-300">
-        © {new Date().getFullYear()} The Webtoon Project. All rights reserved.
+      <div className="text-center text-xs text-gray-400 py-3">
+        © {new Date().getFullYear()}{" "}
+        <span className="font-bold text-[#e44616]">The Webtoon Project</span> 🎨 All rights reserved.
       </div>
 
       {/* Popup Notice */}

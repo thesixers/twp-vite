@@ -1,76 +1,39 @@
 import { useContext, createContext, useState, useEffect } from "react";
-import { fetchWebtoons } from "../requests/apicalls";
+import { serverUrl } from "../requests/apicalls";
+import Loading from "../src/components/Loading";
+import axios from "axios";
 
 const userContext = createContext();
 
 export const useUserContext = () => useContext(userContext);
 
-
 export function UserProvider({ children }) {
+  const [user, setUser] = useState(null);
+  // const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    const [user, setUser] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [token, setToken] = useState([]);
-    const [webtoons, setWebtoons] = useState([]); 
-    const [episodes, setEpisodes] = useState([]);
-    const [scripture, setScripture] = useState([]);
-    const [comments, setComments] = useState([])
+  useEffect(() => {
+    getUserDetails();
+  }, []);
 
+  const getUserDetails = async () => {
+    const res = await axios.get(`${serverUrl}/twp/me`, {
+      withCredentials: true,
+    });
 
-    useEffect(() => {
-        const loadWebtoons = async () => {
-            let res = await fetchWebtoons();
-            if(!res){
-              setIsLoading(false);
-              return;
-            }
-            const { episodes, toonz, user, scriptures, comments } = res;
-        
-            setUser(user);
-            setWebtoons(toonz.reverse());
-            setEpisodes(episodes.reverse());
-            setComments(comments)
-            setIsLoading(false);
-            setScripture(scriptures);
-          };
-        
-          
-          loadWebtoons();
-    }, [])
+    if(res.data.user) setUser(res.data.user);
+  }
 
-    if (isLoading) {
-        return <div className="flex flex-col justify-center items-center h-screen gap-[20px]">
-            <div className="bg-white border-[10px] w-[80px] h-[80px] rounded-full border-gray-200 border-t-[#fc9677] spin"></div>
-            <div className="text-gray-400">loading page...</div>
-        </div>;
-      }
-
-    
-
-    return (
-        <userContext.Provider
-        value={{
-            user,
-            setUser,
-            isLoading,
-            setIsLoading,
-            error,
-            setError,
-            token,
-            setToken,
-            webtoons,
-            setWebtoons,
-            episodes,
-            setEpisodes,
-            scripture,
-            setScripture,
-            comments,
-            setComments
-        }}
+  return (
+    <userContext.Provider
+      value={{
+        user,
+        setUser,
+        error,
+        setError,
+      }}
     >
-        {children}
+      {children}
     </userContext.Provider>
-    )
-
+  );
 }

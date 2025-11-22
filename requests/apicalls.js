@@ -1,7 +1,7 @@
 import axios from "axios";
 
-export const serverUrl = 'https://twp2.onrender.com'
-// export const serverUrl = "http://localhost:3001";
+//export const serverUrl = 'https://twp2.onrender.com'
+export const serverUrl = "http://localhost:3001";
 // export const serverUrl = "http://192.168.43.225:3001";
 
 export const fetchWebtoonDetails = async (ID) => {

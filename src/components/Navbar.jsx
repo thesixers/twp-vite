@@ -1,24 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
 import { useUserContext } from "../../context/UserProvider";
 import axios from "axios";
 import { UserCircle2 } from "lucide-react";
 import UserModal from "./UserModal";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { serverUrl } from "../../requests/apicalls";
 
 export default function Navbar() {
-  const [navList, setNavList] = useState(["Home", "Toons"]);
+  const navList = ["Home", "Toons"];
   const { user, setUser } = useUserContext();
   const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
 
   const handleLogout = async () => {
-    await axios.get("https://twp2.onrender.com/twp/auth/logout", {
+    await axios.get(`${serverUrl}/twp/auth/logout`, {
       withCredentials: true,
     });
     setUser(null);
   };
+
+  if(location.pathname === "/read") {
+    return null;
+  }
 
   return (
     <div className="w-full z-[1000] border-b border-gray-200 flex justify-between items-center bg-white rounded-md sticky top-0">
@@ -26,7 +32,7 @@ export default function Navbar() {
         to="/"
         className="logo w-[80px] h-[80px] flex justify-center items-center"
       >
-        <img src="/twp.png" alt="logo" className="w-full h-full" />
+        <img src="/twp.png" alt="logo" className="w-full h-full" loading="lazy" />
       </Link>
         <div className="nav-items gap-[15px] flex items-center px-[15px]">
           {navList.map((item, index) => (

@@ -1,12 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useUserContext } from "../../context/UserProvider";
 
 export default function ChapterCard({ episode }) {
   const { _id, title, coverImage, releaseDate } = episode;
-  const { webtoons, episodes, comments } = useUserContext();
-  const [webtoonData, setWebtoonData] = useState(null);
-  const [currentEpisode, setCurrentEpisode] = useState(null);
 
   const [CoverImage, setCoverImage] = useState("");
   const [diffDays, setDiffDays] = useState(0);
@@ -24,32 +20,11 @@ export default function ChapterCard({ episode }) {
     let u = new Date(releaseDate);
     const now = new Date();
     setDiffDays((now - u) / (1000 * 60 * 60 * 24));
-    filterWebtoonData();
   }, []);
-
-  const filterWebtoonData = () => {
-    if (webtoons) {
-      let webtoon = webtoons.find((toon) => toon?.chapters.includes(_id));
-      const toonEpisodes = [];
-      const toonComments = [];
-      webtoon?.chapters.forEach((chapter) => {
-        toonEpisodes.push(episodes.find((ep) => ep?._id === chapter));
-      });
-      webtoon?.comments.forEach((comment) => {
-        toonComments.push(comments.find((com) => com?._id === comment));
-      });
-      setWebtoonData({
-        ...webtoon,
-        episodes: toonEpisodes || [],
-        comments: toonComments || [],
-      });
-      setCurrentEpisode(episode);
-    }
-  };
 
   return (
     <div class="max-w-[320px] w-full bg-white rounded-md duration-300 overflow-hidden border-none">
-      <Link to="/read" state={{ webtoonData, currentEpisode }}>
+      <Link to="/read" state={{ currentEpisode: episode, webtoonData: null }}>
         <div class="relative aspect-[5/6] overflow-hidden group">
           <img
             class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500 ease-in-out"

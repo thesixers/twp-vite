@@ -1,50 +1,64 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import axios from "axios";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import GoogleSignIn from "../components/Googleauth";
+import { useUserContext } from "../../context/UserProvider";
+import { serverUrl } from "../../requests/apicalls";
 
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const { setUser } = useUserContext();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
-    // Placeholder for real login logic
     try {
-      let res = await axios.post('https://twp2.onrender.com/twp/auth/login', {
-      // let res = await axios.post('http://localhost:3001/twp/auth/login', {
-        email,
-        password
-      }, {withCredentials: true})
-      let { E, M } = res.data
-      if(E) throw Error(E);
-        
-      if(M){
-        window.location.href = '/'
+      let res = await axios.post(
+        `${serverUrl}/twp/auth/login`,
+        {
+          email,
+          password,
+        },
+        { withCredentials: true }
+      );
+
+      console.log(res.data);
+
+      if (res.data.M) {
+        navigate("/")
+        setUser(res.data.user);
       }
     } catch (error) {
       console.log(error);
-      if(error.response.data.E) return setError(error.response.data.E);
+      if (error.response?.data?.E) return setError(error.response.data.E);
       setError(error.message);
-    }finally{
+    } finally {
       setLoading(false);
     }
-
   };
 
   return (
-    <div className="flex  justify-center min-h-screen px-4">
-      <div className="bg-white p-8 rounded-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center text-gray-900 mb-6">
-          Log in to Your Account
+    <div className="flex justify-center items-center min-h-screen bg-gray-50 px-4">
+      <div className="bg-white shadow-lg p-8 rounded-xl w-full max-w-md">
+        {/* Header */}
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-6">
+          Welcome Back 👋
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Email
             </label>
             <input
@@ -53,13 +67,16 @@ export default function Login() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 w-full px-3 border-gray-400 outline-none py-2 border rounded-md shadow-sm focus:ring-red-500 focus:border-gray-700"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm outline-none focus:border-[#e44616] focus:ring-1 focus:ring-[#e44616]"
               placeholder="Enter your email"
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Password
             </label>
             <input
@@ -68,35 +85,59 @@ export default function Login() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 w-full px-3 py-2 border border-gray-400 outline-none rounded-md shadow-sm focus:ring-red-500 focus:border-gray-700"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm outline-none focus:border-[#e44616] focus:ring-1 focus:ring-[#e44616]"
               placeholder="Enter your password"
             />
           </div>
 
-          {error && <p className="text-sm text-red-600 text-center">{error}</p>}
+          {/* Error */}
+          {error && (
+            <p className="text-sm text-red-600 text-center font-medium">
+              {error}
+            </p>
+          )}
 
+          {/* Options */}
           <div className="flex justify-between items-center text-sm">
             <label className="flex items-center gap-2">
-              <input type="checkbox" className="text-red-600 border-gray-300 rounded" />
+              <input
+                type="checkbox"
+                className="text-[#e44616] border-gray-300 rounded"
+              />
               Remember me
             </label>
-            <Link to="/forgotpass" className="text-red-600 hover:underline">
+            <Link
+              to="/forgotpass"
+              className="text-[#e44616] hover:underline font-medium"
+            >
               Forgot password?
             </Link>
           </div>
 
+          {/* Submit button */}
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 px-4 bg-[#e44616] cursor-pointer text-white font-medium rounded-md hover:bg-[#e44616c7] disabled:bg-red-300"
+            className="w-full py-2 px-4 bg-[#e44616] cursor-pointer text-white font-semibold rounded-lg hover:bg-[#d33e12] transition-colors duration-300 disabled:bg-orange-300"
           >
-            {loading ? 'Signing in...' : 'Sign In'}
+            {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
+        {/* Divider */}
+        <div className="flex items-center gap-2 my-6">
+          <div className="flex-1 h-px bg-gray-300"></div>
+          <span className="text-gray-500 text-sm">or</span>
+          <div className="flex-1 h-px bg-gray-300"></div>
+        </div>
+
+        {/* Google Sign in */}
+        <GoogleSignIn setUser={setUser} />
+
+        {/* Footer */}
         <p className="mt-6 text-center text-sm text-gray-600">
-          Don’t have an account?{' '}
-          <Link to="/signup" className="text-red-600 hover:underline">
+          Don’t have an account?{" "}
+          <Link to="/signup" className="text-[#e44616] font-medium hover:underline">
             Sign up
           </Link>
         </p>

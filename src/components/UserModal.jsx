@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 export default function UserModal({user, handleLogout}) {
   const navigate = useNavigate();
 
+  
+
   return (
     <div className="absolute right-[-23px] top-[50px] mt-2 w-48 rounded-lg bg-white shadow-lg border border-gray-200 animate-dropdown">
       <ul className="py-2 text-sm text-gray-700">
